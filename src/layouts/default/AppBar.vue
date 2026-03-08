@@ -1,7 +1,9 @@
 <template>
   <v-app-bar>
     <div>
-      <v-img src="@/assets/BLChestItem.png" min-width="64" />
+      <RouterLink to="/BLCKeyClicker">
+        <v-img src="@/assets/BLChestItem.png" min-width="64"
+      /></RouterLink>
     </div>
     <v-app-bar-title>
       <span> Black Lion Chest Simulator</span>
@@ -10,5 +12,5 @@
 </template>
 
 <script setup>
-//
+import { RouterLink } from "vue-router";
 </script>

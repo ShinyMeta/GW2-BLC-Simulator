@@ -8,7 +8,7 @@ import { fileURLToPath, URL } from "node:url";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.NODE_ENV === "production" ? "/GW2-BLC-Simultor/" : "/",
+  base: process.env.NODE_ENV === "production" ? "/GW2-BLC-Simulator/" : "/",
   plugins: [
     vue({
       template: { transformAssetUrls },
