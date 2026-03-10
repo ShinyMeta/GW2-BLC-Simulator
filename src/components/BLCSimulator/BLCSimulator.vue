@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import ChestDisplay from "@/components/ChestDisplay.vue";
-import ChestConfigModalButton from "@/components/ChestConfigModalButton.vue";
+import ChestDisplay from "@/components/BLCSimulator/ChestDisplay.vue";
+import ChestConfigModalButton from "@/components/BLCSimulator/ChestConfigModalButton.vue";
 import ChestHistory from "./ChestHistory.vue";
 </script>

@@ -13,6 +13,6 @@
   </v-dialog>
 </template>
 <script setup>
-import ChestConfig from "@/components/ChestConfig.vue";
+import ChestConfig from "@/components/BLCSimulator/ChestConfig.vue";
 </script>
 <style></style>

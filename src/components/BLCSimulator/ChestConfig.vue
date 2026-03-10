@@ -42,7 +42,7 @@
   </v-card>
 </template>
 <script setup>
-import DropConfigTable from "@/components/DropConfigTable.vue";
+import DropConfigTable from "@/components/BLCSimulator/DropConfigTable.vue";
 import { useChestStore } from "@/store/chestStore";
 import { ref, toRefs } from "vue";
 

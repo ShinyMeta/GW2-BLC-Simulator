@@ -63,7 +63,7 @@
 </template>
 
 <script setup>
-import DropDisplay from "@/components/DropDisplay.vue";
+import DropDisplay from "@/components/BLCSimulator/DropDisplay.vue";
 import { useChestStore } from "@/store/chestStore";
 import SpentStats from "./SpentStats.vue";
 import { ref } from "vue";
