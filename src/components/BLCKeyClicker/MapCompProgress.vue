@@ -1,10 +1,11 @@
 <template>
   <div class="map-comp-progress">
     <div class="progress-wrapper">
+      <MapCompBackgroundLayer />
       <v-progress-circular
         :model-value="(progress / clicksToComp) * 100"
-        :size="200"
-        :width="15"
+        :size="400"
+        :width="20"
         color="cyan-darken-3"
         rounded
         class="progress-ring"
@@ -30,6 +31,7 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import BLCKeyImg from "@/assets/item/BLCKey.png";
 import TransmutationChargeImg from "@/assets/item/TransmutationCharge.png";
+import MapCompBackgroundLayer from "@/components/BLCKeyClicker/MapCompBackgroundLayer.vue";
 import MapCompButton from "@/components/BLCKeyClicker/MapCompButton.vue";
 import { useBLCKeyClickerSaveStore } from "@/store/BLCKeyClickerSaveStore";
 
@@ -49,7 +51,8 @@ const rewardImageByType = {
 
 function getRewardFlyoutStyle() {
   const angle = Math.random() * Math.PI * 2;
-  const distance = 95 + Math.random() * 45;
+  const MAX_DISTANCE = 250;
+  const distance = MAX_DISTANCE * 0.8 + Math.random() * MAX_DISTANCE * 0.2;
   const x = Math.cos(angle) * distance;
   const y = Math.sin(angle) * distance;
   const rotation = -20 + Math.random() * 40;
@@ -139,6 +142,7 @@ defineExpose({ progress, showRewardFlyout });
   height: 48px;
   object-fit: contain;
   opacity: 0;
+  box-shadow: 0 0 10px 0 rgb(var(--v-theme-on-background), 1);
   transform: translate(-50%, -50%) scale(0.3);
   will-change: transform, opacity;
   animation: reward-flyout 1.6s ease-out forwards;
