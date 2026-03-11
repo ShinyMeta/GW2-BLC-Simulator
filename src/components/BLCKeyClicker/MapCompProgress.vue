@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeUnmount } from "vue";
+import { ref, computed, onBeforeUnmount, watch } from "vue";
 import { storeToRefs } from "pinia";
 import BLCKeyImg from "@/assets/item/BLCKey.png";
 import TransmutationChargeImg from "@/assets/item/TransmutationCharge.png";
@@ -42,8 +42,14 @@ const saveStore = useBLCKeyClickerSaveStore();
 const {
   mapCompClicksToComp,
   mapCompProgress,
+  mapCompCompletionEvents,
 } = storeToRefs(saveStore);
 const rewardFlyouts = ref([]);
+const lastProcessedMapCompCompletionEventId = ref(
+  mapCompCompletionEvents.value.length
+    ? mapCompCompletionEvents.value[mapCompCompletionEvents.value.length - 1].id
+    : -1
+);
 let nextRewardFlyoutId = 0;
 
 const rewardImageByType = {
@@ -112,18 +118,12 @@ function removeRewardFlyout(id) {
   rewardFlyouts.value = rewardFlyouts.value.filter((reward) => reward.id !== id);
 }
 
-function handleMapComplete() {
-  // If a delayed reset is pending, cancel it and let the store value through
+function holdCompletedProgressRing() {
+  // If a delayed reset is pending, cancel it and let the latest completion win
   if (progressOverride.value !== null) {
     clearTimeout(resetTimer);
     resetTimer = null;
     progressOverride.value = null;
-  }
-
-  const reward = saveStore.stepMapCompProgress();
-
-  if (!reward) {
-    return;
   }
 
   // Completion — hold the ring at 100% for 5 seconds before dropping to 0
@@ -132,19 +132,39 @@ function handleMapComplete() {
     progressOverride.value = null;
     resetTimer = null;
   }, 5000);
+}
 
-  const rewardImage = rewardImageByType[reward.type];
+function handleMapComplete(mapCompCompletionEvent) {
+  holdCompletedProgressRing();
+  const rewardImage = rewardImageByType[mapCompCompletionEvent.reward.type];
 
   if (rewardImage) {
     showRewardFlyout(rewardImage);
   }
 
-  emit("mapComplete", reward);
+  emit("mapComplete", mapCompCompletionEvent);
 }
+
+watch(
+  () =>
+    mapCompCompletionEvents.value.length
+      ? mapCompCompletionEvents.value[mapCompCompletionEvents.value.length - 1].id
+      : -1,
+  () => {
+    const newCompletionEvents = mapCompCompletionEvents.value.filter(
+      (event) => event.id > lastProcessedMapCompCompletionEventId.value
+    );
+
+    newCompletionEvents.forEach((event) => {
+      handleMapComplete(event);
+      lastProcessedMapCompCompletionEventId.value = event.id;
+    });
+  }
+);
 
 function handleClick() {
   emit("click");
-  handleMapComplete();
+  saveStore.advanceMapCompletion("mapCompButton");
 }
 
 // defineExpose({ ringDisplayValue, showRewardFlyout });

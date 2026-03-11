@@ -5,8 +5,10 @@ import { ref } from "vue";
 export const useBLCKeyClickerSaveStore = defineStore(
   "BLCKeyClickerSave",
   () => {
+    const MAX_MAP_COMP_COMPLETION_EVENTS = 20;
     const mapCompClicksToComp = ref(10);
     const mapCompProgress = ref(0);
+    const mapCompCompletionEvents = ref([]);
     const inventory = ref({
       blcKeys: 0,
       goldenKeys: 0,
@@ -19,6 +21,7 @@ export const useBLCKeyClickerSaveStore = defineStore(
       giftOfBattle: 0,
     });
     const mapCompKeyDropChance = ref(0.3);
+    let nextMapCompCompletionEventId = 0;
     // const achievements = ref();
 
     function grantMapCompReward() {
@@ -36,24 +39,41 @@ export const useBLCKeyClickerSaveStore = defineStore(
       return { type: rewardType };
     }
 
-    function stepMapCompProgress() {
+    function appendMapCompletionEvent(reward, source = "unknown") {
+      mapCompCompletionEvents.value.push({
+        id: nextMapCompCompletionEventId++,
+        reward,
+        source,
+      });
+
+      if (mapCompCompletionEvents.value.length > MAX_MAP_COMP_COMPLETION_EVENTS) {
+        mapCompCompletionEvents.value.splice(
+          0,
+          mapCompCompletionEvents.value.length - MAX_MAP_COMP_COMPLETION_EVENTS
+        );
+      }
+    }
+
+    function advanceMapCompletion(source = "unknown") {
       mapCompProgress.value += 1;
 
       if (mapCompProgress.value < mapCompClicksToComp.value) {
-        return null;
+        return;
       }
 
+      const reward = grantMapCompReward();
       mapCompProgress.value = 0;
-      return grantMapCompReward();
+      appendMapCompletionEvent(reward, source);
     }
 
     return {
       mapCompClicksToComp,
       mapCompProgress,
+      mapCompCompletionEvents,
       inventory,
       mapCompKeyDropChance,
       grantMapCompReward,
-      stepMapCompProgress,
+      advanceMapCompletion,
     };
   }
 );
