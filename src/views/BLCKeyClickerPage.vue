@@ -17,7 +17,7 @@
 </template>
 <script setup>
 // import VendorTabs from "@/components/BLCKeyClicker/vendor/VendorTabs.vue";
-import MapCompProgress from "@/components/BLCKeyClicker/MapCompProgress.vue";
+import MapCompProgress from "@/components/BLCKeyClicker/mapComp/MapCompProgress.vue";
 import OpenChestPanel from "@/components/BLCKeyClicker/openChest/OpenChestPanel.vue";
 </script>
 <style></style>

@@ -31,8 +31,8 @@ import { ref, computed, onBeforeUnmount, watch } from "vue";
 import { storeToRefs } from "pinia";
 import BLCKeyImg from "@/assets/item/BLCKey.png";
 import TransmutationChargeImg from "@/assets/item/TransmutationCharge.png";
-import MapCompBackgroundLayer from "@/components/BLCKeyClicker/MapCompBackgroundLayer.vue";
-import MapCompButton from "@/components/BLCKeyClicker/MapCompButton.vue";
+import MapCompBackgroundLayer from "@/components/BLCKeyClicker/mapComp/MapCompBackgroundLayer.vue";
+import MapCompButton from "@/components/BLCKeyClicker/mapComp/MapCompButton.vue";
 import { useBLCKeyClickerSaveStore } from "@/store/BLCKeyClickerSaveStore";
 
 const MAX_REWARD_FLYOUTS = 10;
@@ -99,11 +99,14 @@ function getRewardFlyoutStyle() {
   };
 }
 
-function showRewardFlyout(src) {
+async function showRewardFlyout(src) {
+  let loadImage = new Image();
+  loadImage.src = src;
+  await loadImage.decode();
   rewardFlyouts.value.push({
     id: nextRewardFlyoutId++,
     src,
-    alt: "Map completion reward",
+    alt: "",
     style: getRewardFlyoutStyle(),
   });
   if (rewardFlyouts.value.length > MAX_REWARD_FLYOUTS) {
@@ -131,7 +134,7 @@ function holdCompletedProgressRing() {
   resetTimer = setTimeout(() => {
     progressOverride.value = null;
     resetTimer = null;
-  }, 5000);
+  }, 1000);
 }
 
 function handleMapComplete(mapCompCompletionEvent) {
