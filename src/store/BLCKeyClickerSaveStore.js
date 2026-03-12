@@ -5,7 +5,7 @@ import { ref } from "vue";
 export const useBLCKeyClickerSaveStore = defineStore(
   "BLCKeyClickerSave",
   () => {
-    const MAX_MAP_COMP_COMPLETION_EVENTS = 20;
+    const MAX_MAP_COMP_COMPLETION_EVENTS = 10;
     const mapCompClicksToComp = ref(10);
     const mapCompProgress = ref(0);
     const mapCompCompletionEvents = ref([]);
