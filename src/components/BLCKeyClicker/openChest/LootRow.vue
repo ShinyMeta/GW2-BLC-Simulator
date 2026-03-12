@@ -61,6 +61,7 @@ defineExpose({
   width: 64px;
   height: 64px;
   object-fit: contain;
+  display: block;
 }
 
 @keyframes fly-out {
