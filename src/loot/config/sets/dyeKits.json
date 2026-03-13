@@ -1,0 +1,13 @@
+{
+  "pickCount": 4,
+  "items": [
+    { "itemId": 87603, "label": "Awakened Dye Kit" },
+    { "itemId": 77470, "label": "Winter Chimes Dye Kit" },
+    { "itemId": 98106, "label": "Jade Dye Kit" },
+    { "itemId": 68005, "label": "Glint's Winter Dye Kit" },
+    { "itemId": 47900, "label": "Metallurgic Dye Kit" },
+    { "itemId": 92201, "label": "Norn Dye Kit" },
+    { "itemId": 43078, "label": "Lion's Arch Commemorative Dye Kit" },
+    { "itemId": 86163, "label": "Elonian Landscape Dye Kit" }
+  ]
+}

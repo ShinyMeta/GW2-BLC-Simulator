@@ -1,0 +1,44 @@
+{
+  "sets": {
+    "Example Set A": {
+      "items": [
+        { "itemId": 98917, "label": "Axe Skin" },
+        { "itemId": 98903, "label": "Dagger Skin" },
+        { "itemId": 98876, "label": "Focus Skin" },
+        { "itemId": 98894, "label": "Greatsword Skin" },
+        { "itemId": 98881, "label": "Hammer Skin" },
+        { "itemId": 98906, "label": "Longbow Skin" },
+        { "itemId": 98948, "label": "Mace Skin" },
+        { "itemId": 98897, "label": "Pistol Skin" },
+        { "itemId": 98939, "label": "Rifle Skin" },
+        { "itemId": 98951, "label": "Scepter Skin" },
+        { "itemId": 98933, "label": "Shield Skin" },
+        { "itemId": 98896, "label": "Short Bow Skin" },
+        { "itemId": 98950, "label": "Staff Skin" },
+        { "itemId": 98952, "label": "Sword Skin" },
+        { "itemId": 98912, "label": "Torch Skin" },
+        { "itemId": 98947, "label": "Warhorn Skin" }
+      ]
+    },
+    "Example Set B": {
+      "items": [
+        { "itemId": 95237, "label": "Axe Skin" },
+        { "itemId": 95182, "label": "Dagger Skin" },
+        { "itemId": 95218, "label": "Focus Skin" },
+        { "itemId": 95242, "label": "Greatsword Skin" },
+        { "itemId": 95176, "label": "Hammer Skin" },
+        { "itemId": 95217, "label": "Longbow Skin" },
+        { "itemId": 95228, "label": "Mace Skin" },
+        { "itemId": 95187, "label": "Pistol Skin" },
+        { "itemId": 95192, "label": "Rifle Skin" },
+        { "itemId": 95235, "label": "Scepter Skin" },
+        { "itemId": 95174, "label": "Shield Skin" },
+        { "itemId": 95224, "label": "Short Bow Skin" },
+        { "itemId": 95203, "label": "Staff Skin" },
+        { "itemId": 95173, "label": "Sword Skin" },
+        { "itemId": 95243, "label": "Torch Skin" },
+        { "itemId": 95178, "label": "Warhorn Skin" }
+      ]
+    }
+  }
+}

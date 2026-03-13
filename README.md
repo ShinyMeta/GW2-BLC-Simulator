@@ -1,9 +1,8 @@
 # Simulates opening Black Lion Chests in Guild Wars 2
 
-From Anet's official disclosure of odds at: https://help.guildwars2.com/hc/en-us/articles/26106005230611-Disclosure-of-Odds
+From Anet's official disclosure of odds at: help.guildwars2.com/hc/en-us/articles/26106005230611-Disclosure-of-Odds
 
-
-# Disclosure of Odds in Black Lion Chests
+## Disclosure of Odds in Black Lion Chests
 
 Each Black Lion Chest guarantees four drops out of the total pool of items:
 
@@ -19,7 +18,7 @@ Additionally, there is a 10% chance to get an additional fifth item which draws 
 4. Rare items have a combined drop chance of 1.8%. They each have a 0.06% to 0.09% drop chance from the additional fifth slot.
 5. Super Rare items have a combined drop chance of 0.04%. They each have a 0.006% drop chance from the additional fifth slot.
 
-# Odds Table
+## Odds Table
 
 | Guaranteed               |         |
 |--------------------------|---------|
