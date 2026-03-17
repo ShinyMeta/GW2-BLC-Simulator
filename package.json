@@ -10,7 +10,10 @@
     "fetch:weapons": "node scripts/fetch-weapon-sets.js",
     "generate:example-chest": "node scripts/generate-example-chest.mjs",
     "fetch:exclusives": "node scripts/fetch-exclusives.mjs",
-    "fetch:dye-kits": "node scripts/fetch-dye-kits.mjs"
+    "fetch:dye-kits": "node scripts/fetch-dye-kits.mjs",
+    "fetch:nodes": "node scripts/fetch-nodes.mjs",
+    "fetch:glyphs": "node scripts/fetch-glyphs.mjs",
+    "fetch:all": "node scripts/fetch-all.mjs"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
