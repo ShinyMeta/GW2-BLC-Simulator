@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore",
     "fetch:weapons": "node scripts/fetch-weapon-sets.js",
-    "generate:example-chest": "node scripts/generate-example-chest.mjs"
+    "generate:example-chest": "node scripts/generate-example-chest.mjs",
+    "fetch:exclusives": "node scripts/fetch-exclusives.mjs"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
