@@ -7,7 +7,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore",
-    "fetch:weapons": "node scripts/fetch-weapon-sets.js"
+    "fetch:weapons": "node scripts/fetch-weapon-sets.js",
+    "generate:example-chest": "node scripts/generate-example-chest.mjs"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",

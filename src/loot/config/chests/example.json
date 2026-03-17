@@ -3,84 +3,200 @@
   "sets": {
     "guaranteedItem": {
       "items": [
-        { "itemId": 0, "label": "Guaranteed Rotating Item A" }
+        {
+          "itemId": 86946,
+          "label": "The Evon Gnashblade Lucky Envelope"
+        }
       ]
     },
     "newExclusive": {
       "items": [
-        { "itemId": 106871, "label": "Steam-Powered Legwear Package" }
+        {
+          "itemId": 105378,
+          "label": "Witch Cauldron Chair"
+        }
       ]
     },
     "returningExclusive": {
       "items": [
-        { "itemId": 105412, "label": "Blazing Cape and Glider Combo" }
+        {
+          "itemId": 106814,
+          "label": "Asuran Conjured Doorway Skin"
+        }
       ]
     },
     "dyeKits": {
       "items": [
-        { "itemId": 87603, "label": "Awakened Dye Kit" },
-        { "itemId": 77470, "label": "Winter Chimes Dye Kit" },
-        { "itemId": 98106, "label": "Jade Dye Kit" },
-        { "itemId": 68005, "label": "Glint's Winter Dye Kit" }
+        {
+          "itemId": 68005,
+          "label": "Glint's Winter Dye Kit"
+        },
+        {
+          "itemId": 43078,
+          "label": "Lion's Arch Commemorative Dye Kit"
+        },
+        {
+          "itemId": 77470,
+          "label": "Winter Chimes Dye Kit"
+        },
+        {
+          "itemId": 98106,
+          "label": "Jade Dye Kit"
+        }
       ]
     },
     "uncommonWeapons": {
+      "name": "Winter's Weapon Collection",
       "items": [
-        { "itemId": 98917, "label": "Axe Skin" },
-        { "itemId": 98903, "label": "Dagger Skin" },
-        { "itemId": 98876, "label": "Focus Skin" },
-        { "itemId": 98894, "label": "Greatsword Skin" },
-        { "itemId": 98881, "label": "Hammer Skin" },
-        { "itemId": 98906, "label": "Longbow Skin" },
-        { "itemId": 98948, "label": "Mace Skin" },
-        { "itemId": 98897, "label": "Pistol Skin" },
-        { "itemId": 98939, "label": "Rifle Skin" },
-        { "itemId": 98951, "label": "Scepter Skin" },
-        { "itemId": 98933, "label": "Shield Skin" },
-        { "itemId": 98896, "label": "Short Bow Skin" },
-        { "itemId": 98950, "label": "Staff Skin" },
-        { "itemId": 98952, "label": "Sword Skin" },
-        { "itemId": 98912, "label": "Torch Skin" },
-        { "itemId": 98947, "label": "Warhorn Skin" }
+        {
+          "skinId": 3770,
+          "label": "Winter's Cutter"
+        },
+        {
+          "skinId": 3819,
+          "label": "Winter's Needle"
+        },
+        {
+          "skinId": 3804,
+          "label": "Winter's Edge"
+        },
+        {
+          "skinId": 3811,
+          "label": "Winter's Brunt"
+        },
+        {
+          "skinId": 3789,
+          "label": "Winter's Reach"
+        },
+        {
+          "skinId": 3769,
+          "label": "Winter's Sting"
+        },
+        {
+          "skinId": 3799,
+          "label": "Winter's Shelter"
+        },
+        {
+          "skinId": 3739,
+          "label": "Winter's Arc"
+        },
+        {
+          "skinId": 3824,
+          "label": "Winter's Timber"
+        },
+        {
+          "skinId": 3829,
+          "label": "Winter's Slice"
+        }
       ]
     },
     "rareWeapons": {
+      "name": "Shadow Chevalier Weapon Collection",
       "items": [
-        { "itemId": 95237, "label": "Axe Skin" },
-        { "itemId": 95182, "label": "Dagger Skin" },
-        { "itemId": 95218, "label": "Focus Skin" },
-        { "itemId": 95242, "label": "Greatsword Skin" },
-        { "itemId": 95176, "label": "Hammer Skin" },
-        { "itemId": 95217, "label": "Longbow Skin" },
-        { "itemId": 95228, "label": "Mace Skin" },
-        { "itemId": 95187, "label": "Pistol Skin" },
-        { "itemId": 95192, "label": "Rifle Skin" },
-        { "itemId": 95235, "label": "Scepter Skin" },
-        { "itemId": 95174, "label": "Shield Skin" },
-        { "itemId": 95224, "label": "Short Bow Skin" },
-        { "itemId": 95203, "label": "Staff Skin" },
-        { "itemId": 95173, "label": "Sword Skin" },
-        { "itemId": 95243, "label": "Torch Skin" },
-        { "itemId": 95178, "label": "Warhorn Skin" }
+        {
+          "skinId": 12146,
+          "label": "Shadow Chevalier Sword"
+        },
+        {
+          "skinId": 12179,
+          "label": "Shadow Chevalier Hammer"
+        },
+        {
+          "skinId": 12138,
+          "label": "Shadow Chevalier Longbow"
+        },
+        {
+          "skinId": 12149,
+          "label": "Shadow Chevalier Short Bow"
+        },
+        {
+          "skinId": 12150,
+          "label": "Shadow Chevalier Axe"
+        },
+        {
+          "skinId": 12157,
+          "label": "Shadow Chevalier Dagger"
+        },
+        {
+          "skinId": 12160,
+          "label": "Shadow Chevalier Greatsword"
+        },
+        {
+          "skinId": 12169,
+          "label": "Shadow Chevalier Mace"
+        },
+        {
+          "skinId": 12203,
+          "label": "Shadow Chevalier Pistol"
+        },
+        {
+          "skinId": 12208,
+          "label": "Shadow Chevalier Rifle"
+        },
+        {
+          "skinId": 12183,
+          "label": "Shadow Chevalier Scepter"
+        },
+        {
+          "skinId": 12147,
+          "label": "Shadow Chevalier Staff"
+        },
+        {
+          "skinId": 12210,
+          "label": "Shadow Chevalier Focus"
+        },
+        {
+          "skinId": 12207,
+          "label": "Shadow Chevalier Torch"
+        },
+        {
+          "skinId": 12199,
+          "label": "Shadow Chevalier Warhorn"
+        },
+        {
+          "skinId": 12188,
+          "label": "Shadow Chevalier Shield"
+        }
       ]
     },
     "glyphs": {
       "items": [
-        { "itemId": 92915, "label": "Glyph 1" },
-        { "itemId": 90664, "label": "Glyph 2" }
+        {
+          "itemId": 90664,
+          "label": "Glyph of Alchemy (Unused)"
+        },
+        {
+          "itemId": 92682,
+          "label": "Glyph of the Timekeeper (Unused)"
+        }
       ]
     },
     "nodes": {
       "items": [
-        { "itemId": 68094, "label": "Node 1" },
-        { "itemId": 79085, "label": "Node 2" },
-        { "itemId": 79063, "label": "Node 3" },
-        { "itemId": 81853, "label": "Node 4" }
+        {
+          "itemId": 68090,
+          "label": "Elder Wood Logging Node"
+        },
+        {
+          "itemId": 81852,
+          "label": "Advanced Leather Rack"
+        },
+        {
+          "itemId": 68091,
+          "label": "Ancient Wood Logging Node"
+        },
+        {
+          "itemId": 68095,
+          "label": "Orrian Truffle Harvesting Node"
+        }
       ]
     },
     "tonic": {
       "items": [
-        { "itemId": 49147, "label": "Unopened Endless Mystery Tonic" }
+        {
+          "itemId": 49145,
+          "label": "Unopened Endless Mystery Tonic (beast)"
+        }
       ]
     }
   }
