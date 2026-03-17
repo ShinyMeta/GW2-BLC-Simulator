@@ -41,7 +41,7 @@
 </template>
 <script setup>
 import { computed, ref } from "vue";
-import api from "@/components/utils/gw2api";
+import api from "@/utils/gw2api";
 import { useChestStore } from "@/store/chestStore";
 const chestStore = useChestStore();
 

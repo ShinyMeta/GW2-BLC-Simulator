@@ -1,14 +1,14 @@
 // Utilities
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { generateChestConfig } from "@/loot/generateChestConfig";
-import guaranteedItemCatalog from "@/loot/config/sets/guaranteedItems.json";
-import exclusivesCatalog from "@/loot/config/sets/exclusives.json";
-import dyeKitsCatalog from "@/loot/config/sets/dyeKits.json";
-import weaponsCatalog from "@/loot/config/sets/weapons.json";
-import glyphsCatalog from "@/loot/config/sets/glyphs.json";
-import nodesCatalog from "@/loot/config/sets/nodes.json";
-import tonicsCatalog from "@/loot/config/sets/tonics.json";
+import { generateChestConfig } from "@/store/loot/generateChestConfig";
+import guaranteedItemCatalog from "@/store/loot/config/sets/guaranteedItems.json";
+import exclusivesCatalog from "@/store/loot/config/sets/exclusives.json";
+import dyeKitsCatalog from "@/store/loot/config/sets/dyeKits.json";
+import weaponsCatalog from "@/store/loot/config/sets/weapons.json";
+import glyphsCatalog from "@/store/loot/config/sets/glyphs.json";
+import nodesCatalog from "@/store/loot/config/sets/nodes.json";
+import tonicsCatalog from "@/store/loot/config/sets/tonics.json";
 
 export const useBLCKeyClickerSaveStore = defineStore(
   "BLCKeyClickerSave",

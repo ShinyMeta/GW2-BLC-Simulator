@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { shallowRef, ref } from "vue";
-import { mergeTemplateWithConfig, buildLootTable, openChest } from "@/loot/lootService";
+import { mergeTemplateWithConfig, buildLootTable, openChest } from "@/store/loot/lootService";
 
 export const useLootStore = defineStore("loot", () => {
   const lootTable = shallowRef(null);

@@ -221,8 +221,8 @@ import { computed, ref, watch } from "vue";
 import unknownItem from "@/assets/item/unknown.png";
 import blcKeyIcon from "@/assets/item/BLCKey.png";
 import goldenBlcKeyIcon from "@/assets/item/goldenBLCKey.png";
-import template from "@/loot/config/template.json";
-import { mergeTemplateWithConfig } from "@/loot/lootService";
+import template from "@/store/loot/config/template.json";
+import { mergeTemplateWithConfig } from "@/store/loot/lootService";
 
 const CATEGORY_ORDER = [
   "guaranteed",
