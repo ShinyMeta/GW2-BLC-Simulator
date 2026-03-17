@@ -133,7 +133,12 @@
                                 </span>
                               </div>
                             </div>
-                            <div class="text-subtitle-2">{{ row.label }}</div>
+                            <div class="text-subtitle-2">
+                              {{ row.label }}
+                              <v-chip size="x-small" variant="tonal" class="ml-1">
+                                {{ row.items.length }}
+                              </v-chip>
+                            </div>
                           </div>
                           <v-chip size="small" variant="tonal">
                             {{ formatPercent(getRowPercent(row.totalWeight, panel.denominator)) }}
