@@ -18,7 +18,11 @@ async function main() {
   const achievements = await api.achievements().many(category.achievements);
   console.log(`Fetched ${achievements.length} achievements`);
 
-  const EXCLUDED = ["Gold Essence Weapon Collection"];
+  const EXCLUDED = [
+    "Gold Essence Weapon Collection",
+    "Aetherized Weapon Collection",
+    "Privateer Weapon Collection",
+  ];
   const weaponSets = achievements.filter(
     (a) =>
       a.bits &&
