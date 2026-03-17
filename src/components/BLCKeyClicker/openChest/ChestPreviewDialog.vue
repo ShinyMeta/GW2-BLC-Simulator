@@ -31,12 +31,9 @@
             <template #title>
               <div class="panel-header">
                 <div class="panel-header__main">
-                  <div
-                    v-if="getPanelPreviewEntries(panel).length"
-                    class="panel-preview-icons"
-                  >
+                  <div class="panel-preview-icons">
                     <div
-                      v-for="preview in getPanelPreviewEntries(panel)"
+                      v-for="preview in panel.previewEntries"
                       :key="preview.key"
                       class="panel-preview-icon-wrap"
                     >
@@ -82,11 +79,10 @@
                         <div class="panel-header panel-header--group">
                           <div class="panel-header__main">
                             <div
-                              v-if="getRowPreviewEntries(row).length"
                               class="panel-preview-icons panel-preview-icons--group"
                             >
                               <div
-                                v-for="preview in getRowPreviewEntries(row)"
+                                v-for="preview in (row.previewEntries ?? [])"
                                 :key="preview.key"
                                 class="panel-preview-icon-wrap"
                               >
@@ -148,12 +144,20 @@
 
                   <div v-else class="loot-entry">
                     <div class="loot-entry__info">
-                      <v-avatar rounded="0" size="40" class="loot-entry__icon">
-                        <v-img
-                          :src="getEntryIcon(row.item)"
-                          :alt="getEntryName(row.item)"
-                        />
-                      </v-avatar>
+                      <div class="loot-entry__icon-wrap">
+                        <v-avatar rounded="0" size="40" class="loot-entry__icon">
+                          <v-img
+                            :src="getEntryIcon(row.item)"
+                            :alt="getEntryName(row.item)"
+                          />
+                        </v-avatar>
+                        <span
+                          v-if="getItemBadgeText(row)"
+                          class="loot-entry__badge"
+                        >
+                          {{ getItemBadgeText(row) }}
+                        </span>
+                      </div>
                       <div>
                         <div class="text-body-2">{{ getEntryName(row.item) }}</div>
                         <div
@@ -180,7 +184,7 @@
 
 <script setup>
 import { computed, ref, watch } from "vue";
-import noRewardImg from "@/assets/noRewardItem.png";
+import unknownItem from "@/assets/item/unknown.png";
 import template from "@/loot/config/template.json";
 import { mergeTemplateWithConfig } from "@/loot/lootService";
 
@@ -337,9 +341,15 @@ const previewPanels = computed(() =>
 
     return {
       ...panel,
+      rows: panel.rows.map((row) =>
+        row.type === "group"
+          ? { ...row, previewEntries: computeRowPreviewEntries(row) }
+          : row
+      ),
       denominator,
       subtitle,
       poolPercentText,
+      previewEntries: computePanelPreviewEntries(panel),
     };
   })
 );
@@ -458,57 +468,55 @@ function getEntryName(entry) {
 }
 
 function getEntryIcon(entry) {
-  return getEntryMetadata(entry)?.icon ?? noRewardImg;
+  return getEntryMetadata(entry)?.icon ?? unknownItem;
 }
 
-function getPanelPreviewEntries(panel) {
+function getItemBadgeText(row) {
+  if (row.setKey === "newExclusive") return "NEW";
+  return "";
+}
+
+function pickRandom(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+function computePanelPreviewEntries(panel) {
   if (panel.key === "guaranteed") {
-    return panel.rows
-      .filter((row) => row.type === "item")
-      .slice(0, 2)
-      .map((row, index) => ({
-        key: `${panel.key}-${row.setKey ?? "fixed"}-${index}`,
-        entry: row.item,
-      }));
+    const rotatingRow = panel.rows.find(
+      (row) => row.type === "item" && row.setKey === "guaranteedItem"
+    );
+    return rotatingRow
+      ? [{ key: `${panel.key}-guaranteedItem`, entry: rotatingRow.item }]
+      : [];
   }
 
   if (panel.key === "exclusive") {
-    const rowOrder = ["newExclusive", "returningExclusive"];
-
-    return rowOrder
-      .map((setKey) => panel.rows.find((row) => row.type === "item" && row.setKey === setKey))
-      .filter(Boolean)
-      .map((row) => ({
-        key: `${panel.key}-${row.setKey}`,
-        entry: row.item,
-        badgeText: row.setKey === "newExclusive" ? "NEW" : "",
-      }));
+    const newRow = panel.rows.find(
+      (row) => row.type === "item" && row.setKey === "newExclusive"
+    );
+    return newRow
+      ? [{ key: `${panel.key}-newExclusive`, entry: newRow.item, badgeText: "NEW" }]
+      : [];
   }
 
   return [];
 }
 
-function getRowPreviewEntries(row) {
-  if (row.type !== "group") {
+function computeRowPreviewEntries(row) {
+  if (row.type !== "group" || !row.items.length) {
     return [];
   }
 
-  if (row.setKey === "dyeKits") {
-    return row.items.map((item, index) => ({
-      key: `${row.key}-${index}`,
-      entry: item,
-    }));
-  }
+  const randomPreviewSlots = [
+    "dyeKits",
+    "glyphs",
+    "nodes",
+    "uncommonWeapons",
+    "rareWeapons",
+  ];
 
-  if (row.setKey === "uncommonWeapons" || row.setKey === "rareWeapons") {
-    return row.items.length
-      ? [
-          {
-            key: `${row.key}-preview`,
-            entry: row.items[0],
-          },
-        ]
-      : [];
+  if (randomPreviewSlots.includes(row.setKey)) {
+    return [{ key: `${row.key}-preview`, entry: pickRandom(row.items) }];
   }
 
   return [];
@@ -609,10 +617,12 @@ function formatPercent(percent) {
   align-items: center;
   gap: 4px;
   flex: 0 0 auto;
+  min-width: 30px;
 }
 
 .panel-preview-icons--group {
   gap: 3px;
+  min-width: 36px;
 }
 
 .panel-preview-icon-wrap {
@@ -685,6 +695,25 @@ function formatPercent(percent) {
 .loot-entry__icon {
   flex: 0 0 auto;
   background: rgba(var(--v-theme-surface-variant), 0.4);
+}
+
+.loot-entry__icon-wrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.loot-entry__badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  background: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary));
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
 }
 
 .loot-entry__percent {
