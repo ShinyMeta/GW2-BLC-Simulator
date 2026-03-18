@@ -17,8 +17,8 @@ export const useBLCKeyClickerSaveStore = defineStore(
       // gems: 0, not sure about these
       transmutationCharges: 0,
       blackLionWeaponTickets: 0,
-      giftOfExploration: 0,
-      giftOfBattle: 0,
+      // giftOfExploration: 0,
+      // giftOfBattle: 0,
     });
     const mapCompKeyDropChance = ref(0.3);
     let nextMapCompCompletionEventId = 0;
@@ -54,6 +54,16 @@ export const useBLCKeyClickerSaveStore = defineStore(
       }
     }
 
+    /**
+     * Add a numeric amount to an inventory field, rounding to one
+     * decimal place to prevent floating-point drift (e.g. ticket scraps).
+     * @param {string} key - inventory property name
+     * @param {number} amount
+     */
+    function addToInventory(key, amount) {
+      inventory.value[key] = Math.round((inventory.value[key] + amount) * 10) / 10;
+    }
+
     function advanceMapCompletion(source = "unknown") {
       mapCompProgress.value += 1;
 
@@ -72,6 +82,7 @@ export const useBLCKeyClickerSaveStore = defineStore(
       mapCompCompletionEvents,
       inventory,
       mapCompKeyDropChance,
+      addToInventory,
       grantMapCompReward,
       advanceMapCompletion,
     };

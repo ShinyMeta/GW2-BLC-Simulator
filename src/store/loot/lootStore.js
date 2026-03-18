@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
-import { shallowRef, ref } from "vue";
+import { shallowRef, ref, computed } from "vue";
 import { mergeTemplateWithConfig, buildLootTable, openChest } from "@/store/loot/lootService";
 import { generateChestConfig } from "@/store/loot/generateChestConfig";
+import { LootHandler } from "@/store/loot/lootHandler";
+import { useBLCKeyClickerSaveStore } from "@/store/BLCKeyClickerSaveStore";
 import template from "@/store/loot/config/template.json";
 import guaranteedItemCatalog from "@/store/loot/config/sets/guaranteedItems.json";
 import exclusivesCatalog from "@/store/loot/config/sets/exclusives.json";
@@ -11,16 +13,42 @@ import glyphsCatalog from "@/store/loot/config/sets/glyphs.json";
 import nodesCatalog from "@/store/loot/config/sets/nodes.json";
 import tonicsCatalog from "@/store/loot/config/sets/tonics.json";
 
+const ITEM_ID = {
+  STATUETTE: 86694,
+  TRANSMUTATION_CHARGE: 64736,
+  GOLDEN_KEY: 80967,
+  WEAPON_TICKET: 43992,
+  TICKET_SCRAP: 43998,
+};
+
 export const useLootStore = defineStore("loot", () => {
   const lootTable = shallowRef(null);
   const chestName = ref("");
   const currentChestConfig = ref(null);
   const lastDrops = shallowRef([]);
+  const chestHistory = ref([]);
+
+  const saveStore = useBLCKeyClickerSaveStore();
+  const lootHandler = new LootHandler();
+
+  const currentHistoryEntry = computed(() =>
+    chestHistory.value.length > 0
+      ? chestHistory.value[chestHistory.value.length - 1]
+      : null,
+  );
+
+  lootHandler
+    .onItemId(ITEM_ID.STATUETTE, (drop) => saveStore.addToInventory("statuettes", drop.quantity))
+    .onItemId(ITEM_ID.TRANSMUTATION_CHARGE, (drop) => saveStore.addToInventory("transmutationCharges", drop.quantity))
+    .onItemId(ITEM_ID.GOLDEN_KEY, (drop) => saveStore.addToInventory("goldenKeys", drop.quantity))
+    .onItemId(ITEM_ID.WEAPON_TICKET, (drop) => saveStore.addToInventory("blackLionWeaponTickets", drop.quantity))
+    .onItemId(ITEM_ID.TICKET_SCRAP, () => saveStore.addToInventory("blackLionWeaponTickets", 0.1));
 
   /**
    * Load a specific chest by providing a chest config.
    * Merges the config with the shared template, builds the loot table,
-   * and stores the config for downstream consumers (e.g. ChestPreviewDialog).
+   * stores the config for downstream consumers (e.g. ChestPreviewDialog),
+   * and starts a new chest-history entry for this config.
    *
    * @param {object} chestConfig - generated chest config with inline sets
    */
@@ -29,6 +57,11 @@ export const useLootStore = defineStore("loot", () => {
     lootTable.value = buildLootTable(merged);
     chestName.value = chestConfig.name ?? "";
     currentChestConfig.value = chestConfig;
+
+    chestHistory.value.push({
+      config: structuredClone(chestConfig),
+      opens: [],
+    });
   }
 
   /**
@@ -58,6 +91,9 @@ export const useLootStore = defineStore("loot", () => {
    * The chest must be loaded first via `loadChest()` or
    * `generateCurrentChestConfig()`.
    *
+   * Each drop is run through the loot handler (updating inventory, etc.)
+   * and appended to the current history entry.
+   *
    * @returns {Array<{ itemId: number, skinId?: number, label: string, quantity: number, category: string }>}
    */
   function open() {
@@ -66,6 +102,13 @@ export const useLootStore = defineStore("loot", () => {
     }
     const drops = openChest(lootTable.value);
     lastDrops.value = drops;
+
+    lootHandler.processDrops(drops);
+
+    if (currentHistoryEntry.value) {
+      currentHistoryEntry.value.opens.push(drops);
+    }
+
     return drops;
   }
 
@@ -74,6 +117,9 @@ export const useLootStore = defineStore("loot", () => {
     chestName,
     currentChestConfig,
     lastDrops,
+    chestHistory,
+    currentHistoryEntry,
+    lootHandler,
     loadChest,
     generateCurrentChestConfig,
     open,
