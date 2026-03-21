@@ -19,7 +19,7 @@ import {
 } from "./lib/wiki-scraper.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUTPUT = join(__dirname, "../src/loot/config/sets/glyphs.json");
+const OUTPUT = join(__dirname, "../src/store/loot/config/sets/glyphs.json");
 const PICK_COUNT = 2;
 
 function parseGlyphNames(wikitext) {

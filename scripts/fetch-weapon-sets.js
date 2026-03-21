@@ -6,7 +6,7 @@ const path = require("path");
 const api = client();
 api.cacheStorage(cacheMemory());
 
-const OUTPUT = path.join(__dirname, "../src/loot/config/sets/weapons.json");
+const OUTPUT = path.join(__dirname, "../src/store/loot/config/sets/weapons.json");
 const CATEGORY_ID = 76;
 
 async function main() {

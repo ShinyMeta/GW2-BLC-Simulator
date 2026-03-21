@@ -22,7 +22,7 @@ import {
 } from "./lib/wiki-scraper.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUTPUT = join(__dirname, "../src/loot/config/sets/dyeKits.json");
+const OUTPUT = join(__dirname, "../src/store/loot/config/sets/dyeKits.json");
 const PICK_COUNT = 4;
 const EXCLUDED_KITS = new Set(["Smooth Berry Dye Kit"]);
 

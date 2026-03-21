@@ -2,7 +2,7 @@
   <v-card class="chest-preview-card" variant="outlined">
     <div class="chest-preview-card__header">
       <div class="chest-preview-card__title text-subtitle-2">
-        {{ chestName || "Black Lion Chest" }}
+        {{ currentChestConfig?.name || "Black Lion Chest" }}
       </div>
       <ChestPreviewDialog :chest-config="currentChestConfig">
         <template #activator="activatorProps">
@@ -59,7 +59,7 @@ import ChestPreviewDialog from "./ChestPreviewDialog.vue";
 import { useLootStore } from "@/store/loot/lootStore";
 
 const lootStore = useLootStore();
-const { currentChestConfig, chestName } = storeToRefs(lootStore);
+const { currentChestConfig } = storeToRefs(lootStore);
 
 function pickRandom(array) {
   return array[Math.floor(Math.random() * array.length)];

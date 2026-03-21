@@ -5,13 +5,6 @@ import { generateChestConfig } from "@/store/loot/generateChestConfig";
 import { LootHandler } from "@/store/loot/lootHandler";
 import { useBLCKeyClickerSaveStore } from "@/store/BLCKeyClickerSaveStore";
 import template from "@/store/loot/config/template.json";
-import guaranteedItemCatalog from "@/store/loot/config/sets/guaranteedItems.json";
-import exclusivesCatalog from "@/store/loot/config/sets/exclusives.json";
-import dyeKitsCatalog from "@/store/loot/config/sets/dyeKits.json";
-import weaponsCatalog from "@/store/loot/config/sets/weapons.json";
-import glyphsCatalog from "@/store/loot/config/sets/glyphs.json";
-import nodesCatalog from "@/store/loot/config/sets/nodes.json";
-import tonicsCatalog from "@/store/loot/config/sets/tonics.json";
 
 const ITEM_ID = {
   STATUETTE: 86694,
@@ -23,7 +16,6 @@ const ITEM_ID = {
 
 export const useLootStore = defineStore("loot", () => {
   const baseLootTable = shallowRef(null);
-  const chestName = ref("");
   const currentChestConfig = ref(null);
   const lastDrops = shallowRef([]);
   const chestHistory = ref([]);
@@ -71,7 +63,6 @@ export const useLootStore = defineStore("loot", () => {
   function loadChest(chestConfig) {
     const merged = mergeTemplateWithConfig(template, chestConfig);
     baseLootTable.value = buildLootTable(merged);
-    chestName.value = chestConfig.name ?? "";
     currentChestConfig.value = chestConfig;
 
     const exclusiveItems = baseLootTable.value.fifthDrop.filter(
@@ -93,15 +84,7 @@ export const useLootStore = defineStore("loot", () => {
    * @returns {object} the generated chest config
    */
   function generateCurrentChestConfig() {
-    const config = generateChestConfig({
-      guaranteedItemCatalog,
-      exclusivesCatalog,
-      dyeKitsCatalog,
-      weaponsCatalog,
-      glyphsCatalog,
-      nodesCatalog,
-      tonicsCatalog,
-    });
+    const config = generateChestConfig();
 
     loadChest(config);
     return config;
@@ -140,7 +123,6 @@ export const useLootStore = defineStore("loot", () => {
 
   return {
     lootTable,
-    chestName,
     currentChestConfig,
     lastDrops,
     chestHistory,

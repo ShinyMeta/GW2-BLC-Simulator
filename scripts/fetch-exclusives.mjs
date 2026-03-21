@@ -20,7 +20,8 @@ import {
 } from "./lib/wiki-scraper.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUTPUT = join(__dirname, "../src/loot/config/sets/exclusives.json");
+const OUTPUT = join(__dirname, "../src/store/loot/config/sets/exclusives.json");
+const EXCLUDED_ITEM_IDS = new Set([105365, 105387, 105349]);
 
 function parseStatuetteItems(wikitext) {
   const sections = [
@@ -87,6 +88,8 @@ async function main() {
 
   console.log(`Resolving ${allNames.length} item pages through the wiki + GW2 APIs…`);
   const { items, missing } = await fetchCatalogItemsFromPageTitles(allNames);
+  const filteredItems = items.filter((item) => !EXCLUDED_ITEM_IDS.has(item.itemId));
+  const excludedItems = items.filter((item) => EXCLUDED_ITEM_IDS.has(item.itemId));
 
   if (missing.length) {
     console.warn(`\n⚠ ${missing.length} unresolved:`);
@@ -95,8 +98,15 @@ async function main() {
     }
   }
 
-  writeFileSync(OUTPUT, JSON.stringify({ items }, null, 2) + "\n");
-  console.log(`\nWrote ${items.length} items → ${OUTPUT}`);
+  if (excludedItems.length) {
+    console.log(`\nExcluded ${excludedItems.length} items by ID:`);
+    for (const item of excludedItems) {
+      console.log(`  - ${item.itemId}: ${item.label}`);
+    }
+  }
+
+  writeFileSync(OUTPUT, JSON.stringify({ items: filteredItems }, null, 2) + "\n");
+  console.log(`\nWrote ${filteredItems.length} items → ${OUTPUT}`);
 }
 
 main().catch((err) => {

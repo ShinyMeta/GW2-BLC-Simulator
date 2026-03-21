@@ -1,4 +1,11 @@
 import chestNames from "./config/sets/chestNames.json";
+import guaranteedItemCatalog from "./config/sets/guaranteedItems.json";
+import exclusivesCatalog from "./config/sets/exclusives.json";
+import dyeKitsCatalog from "./config/sets/dyeKits.json";
+import weaponsCatalog from "./config/sets/weapons.json";
+import glyphsCatalog from "./config/sets/glyphs.json";
+import nodesCatalog from "./config/sets/nodes.json";
+import tonicsCatalog from "./config/sets/tonics.json";
 
 /**
  * Picks a random chest name from the catalog.
@@ -43,7 +50,7 @@ function pickRandomWeaponSet(catalog, exclude = []) {
 }
 
 /**
- * Generates a chest config by randomly selecting from catalog files.
+ * Generates a chest config by randomly selecting from provided catalogs.
  *
  * Each catalog's `pickCount` (or implicit count for exclusives/weapons)
  * determines how many items are drawn. Picks are always unique within
@@ -51,16 +58,16 @@ function pickRandomWeaponSet(catalog, exclude = []) {
  *
  * @param {object} options
  * @param {string} [options.name] - display name override (random if omitted)
- * @param {object} options.guaranteedItemCatalog  - guaranteed-items catalog JSON
- * @param {object} options.exclusivesCatalog      - exclusives catalog JSON
- * @param {object} options.dyeKitsCatalog         - dye-kits catalog JSON
- * @param {object} options.weaponsCatalog          - weapons catalog JSON
- * @param {object} options.glyphsCatalog           - glyphs catalog JSON
- * @param {object} options.nodesCatalog            - nodes catalog JSON
- * @param {object} options.tonicsCatalog           - tonics catalog JSON
+ * @param {object} options.guaranteedItemCatalog - guaranteed-items catalog JSON
+ * @param {object} options.exclusivesCatalog - exclusives catalog JSON
+ * @param {object} options.dyeKitsCatalog - dye-kits catalog JSON
+ * @param {object} options.weaponsCatalog - weapons catalog JSON
+ * @param {object} options.glyphsCatalog - glyphs catalog JSON
+ * @param {object} options.nodesCatalog - nodes catalog JSON
+ * @param {object} options.tonicsCatalog - tonics catalog JSON
  * @returns {object} a chest config ready for lootStore.loadChest()
  */
-export function generateChestConfig({
+export function generateChestConfigFromCatalogs({
   name,
   guaranteedItemCatalog,
   exclusivesCatalog,
@@ -92,4 +99,24 @@ export function generateChestConfig({
       tonic: pickRandom(tonicsCatalog, tonicsCatalog.pickCount),
     },
   };
+}
+
+/**
+ * Generates a chest config from the app's bundled set catalogs.
+ *
+ * @param {object} [options]
+ * @param {string} [options.name] - display name override (random if omitted)
+ * @returns {object} a chest config ready for lootStore.loadChest()
+ */
+export function generateChestConfig({ name } = {}) {
+  return generateChestConfigFromCatalogs({
+    name,
+    guaranteedItemCatalog,
+    exclusivesCatalog,
+    dyeKitsCatalog,
+    weaponsCatalog,
+    glyphsCatalog,
+    nodesCatalog,
+    tonicsCatalog,
+  });
 }
