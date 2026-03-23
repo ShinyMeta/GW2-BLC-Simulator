@@ -1,7 +1,25 @@
 <template>
   <div class="open-chest-panel">
     <div class="chest-controls">
-      <ChestPreviewCard />
+      <div class="chest-controls__side chest-controls__side--left">
+        <v-btn-toggle
+          model-value="chest"
+          mandatory
+          class="item-toggle"
+        >
+          <v-btn value="chest" class="item-select-btn">
+            <div class="item-select-content">
+              <ItemImage
+                :item="{ name: 'Black Lion Chest', icon: blcChestItemImg }"
+                :size="52"
+                :tooltip="false"
+                :text-overlay="false"
+                class="item-select-image"
+              />
+            </div>
+          </v-btn>
+        </v-btn-toggle>
+      </div>
 
       <OpenChestButton
         ref="chestButton"
@@ -9,35 +27,37 @@
         @click="handleChestClick"
       />
 
-      <v-btn-toggle
-        v-model="selectedKeyType"
-        mandatory
-        class="key-toggle"
-      >
-        <v-btn
-          v-for="(key, index) in keyTypes"
-          :key="key.value"
-          :value="key.value"
-          class="key-select-btn"
-          :class="{ empty: inventory[key.value] === 0 }"
+      <div class="chest-controls__side chest-controls__side--right">
+        <v-btn-toggle
+          v-model="selectedKeyType"
+          mandatory
+          class="item-toggle"
         >
-          <div class="key-select-content">
-            <ItemImage
-              :item="{
-                name: key.name,
-                icon: key.icon,
-                quantity: inventory[key.value],
-              }"
-              :size="52"
-              :tooltip="false"
-              :text-overlay="String(inventory[key.value])"
-              text-overlay-style="shadow"
-              :text-overlay-position="keyTextOverlayPosition(index)"
-              class="key-select-image"
-            />
-          </div>
-        </v-btn>
-      </v-btn-toggle>
+          <v-btn
+            v-for="(key, index) in keyTypes"
+            :key="key.value"
+            :value="key.value"
+            class="item-select-btn"
+            :class="{ empty: inventory[key.value] === 0 }"
+          >
+            <div class="item-select-content">
+              <ItemImage
+                :item="{
+                  name: key.name,
+                  icon: key.icon,
+                  quantity: inventory[key.value],
+                }"
+                :size="52"
+                :tooltip="false"
+                :text-overlay="String(inventory[key.value])"
+                text-overlay-style="shadow"
+                :text-overlay-position="keyTextOverlayPosition(index)"
+                class="item-select-image"
+              />
+            </div>
+          </v-btn>
+        </v-btn-toggle>
+      </div>
     </div>
     <LootRow ref="lootRow" />
   </div>
@@ -46,12 +66,12 @@
 <script setup>
 import { computed, onBeforeUnmount, ref } from "vue";
 import { storeToRefs } from "pinia";
+import blcChestItemImg from "@/assets/BLChestItem.png";
 import blcKeyImg from "@/assets/item/BLCKey.png";
 import goldenBlcKeyImg from "@/assets/item/goldenBLCKey.png";
 import unknownItem from "@/assets/item/unknown.png";
 import ItemImage from "@/components/BLCKeyClicker/ItemImage.vue";
 import OpenChestButton from "@/components/BLCKeyClicker/openChest/OpenChestButton.vue";
-import ChestPreviewCard from "@/components/BLCKeyClicker/openChest/ChestPreviewCard.vue";
 import LootRow from "@/components/BLCKeyClicker/openChest/LootRow.vue";
 import { useBLCKeyClickerSaveStore } from "@/store/BLCKeyClickerSaveStore";
 import { useLootStore } from "@/store/loot/lootStore";
@@ -153,52 +173,65 @@ onBeforeUnmount(() => {
 }
 
 .chest-controls {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
+  gap: 16px;
   width: 100%;
 }
 
-/* --- key toggle --- */
+.chest-controls__side--left {
+  justify-self: end;
+}
 
-.key-toggle {
+.chest-controls__side--right {
+  justify-self: start;
+}
+
+/* --- shared item toggle (chest & key groups) --- */
+
+.item-toggle {
   height: auto !important;
 }
 
-.key-toggle :deep(.v-btn) {
+.item-toggle :deep(.v-btn) {
   padding: 6px;
   height: auto !important;
   min-width: 0 !important;
   overflow: hidden;
 }
 
-.key-toggle :deep(.v-btn:first-child),
-.key-toggle :deep(.v-btn:first-child .item-image__img) {
+.item-toggle :deep(.v-btn:first-child),
+.item-toggle :deep(.v-btn:first-child .item-image__img) {
   border-radius: 50% 0 0 50%;
 }
 
-.key-toggle :deep(.v-btn:last-child),
-.key-toggle :deep(.v-btn:last-child .item-image__img) {
+.item-toggle :deep(.v-btn:last-child),
+.item-toggle :deep(.v-btn:last-child .item-image__img) {
   border-radius: 0 50% 50% 0;
 }
 
-.key-toggle :deep(.v-avatar) {
+.item-toggle :deep(.v-btn:only-child),
+.item-toggle :deep(.v-btn:only-child .item-image__img) {
+  border-radius: 50%;
+}
+
+.item-toggle :deep(.v-avatar) {
   background: none;
 }
 
-.key-toggle :deep(.v-btn.empty) {
+.item-toggle :deep(.v-btn.empty) {
   opacity: 0.7;
 }
 
-.key-select-content {
+.item-select-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
 }
 
-.open-chest-panel :deep(.key-select-image .item-image__img) {
+.open-chest-panel :deep(.item-select-image .item-image__img) {
   object-fit: contain;
 }
 

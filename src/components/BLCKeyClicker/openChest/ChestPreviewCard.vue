@@ -100,7 +100,7 @@ const weaponPreviewItems = computed(() => {
 
 <style scoped>
 .chest-preview-card {
-  width: 240px;
+  width: 100%;
 }
 
 .chest-preview-card__header {

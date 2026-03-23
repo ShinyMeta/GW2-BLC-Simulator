@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="blc-clicker-layout">
+  <v-layout>
     <v-navigation-drawer
       v-model="leftDrawerOpen"
       :permanent="lgAndUp"
@@ -7,7 +7,9 @@
       location="left"
       :width="320"
     >
-      <div class="pa-4">Left panel placeholder</div>
+      <div class="pa-3">
+        <ChestPreviewCard />
+      </div>
     </v-navigation-drawer>
 
     <v-main>
@@ -59,6 +61,7 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
+import ChestPreviewCard from "@/components/BLCKeyClicker/openChest/ChestPreviewCard.vue";
 import MapCompProgress from "@/components/BLCKeyClicker/mapComp/MapCompProgress.vue";
 import OpenChestPanel from "@/components/BLCKeyClicker/openChest/OpenChestPanel.vue";
 import { useLootStore } from "@/store/loot/lootStore";
@@ -79,36 +82,31 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.blc-clicker-layout {
-  height: calc(100dvh - 64px);
-  overflow: hidden;
-}
-
 .center-pane {
-  position: absolute;
-  inset: 0;
   display: flex;
   flex-direction: column;
+  min-height: calc(100dvh - 64px);
 }
 
-.center-pane__top{
+.center-pane__top {
   flex: 3;
-} 
+}
+
 .center-pane__bottom {
   flex: 6;
-} 
+}
 
 .center-pane__top,
 .center-pane__bottom {
-  min-height: 0;
+  min-height: 300px;
+  padding: 24px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 }
 
 .panel-tab {
-  position: absolute;
+  position: fixed;
   top: 50%;
   transform: translateY(-50%);
 }
