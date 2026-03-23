@@ -185,13 +185,12 @@ onBeforeUnmount(() => {
   position: relative;
   width: 64px;
   height: 64px;
-  border: 2px solid rgba(var(--v-theme-on-surface), 0.15);
-  border-radius: 4px;
+  border: 2px solid rgba(var(--v-theme-on-surface), 0.2);
   flex-shrink: 0;
 }
 
 .loot-slot-container--extra {
-  border-color: rgba(var(--v-theme-on-surface), 0.08);
+  border-color: rgba(var(--v-theme-on-surface), 0.5);
 }
 
 .loot-placeholder {
