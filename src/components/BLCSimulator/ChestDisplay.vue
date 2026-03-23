@@ -13,7 +13,7 @@
           @click="chestStore.openNewChest"
         >
           <v-img
-            src="@/assets/BLCKeyItem.png"
+            src="@/assets/item/BLCKey.png"
             rounded="pill"
             min-width="64"
             class="buttonImage"
@@ -24,7 +24,7 @@
             </div>
           </v-img>
           <v-img
-            src="@/assets/goldenBLCKeyItem.png"
+            src="@/assets/item/goldenBLCKey.png"
             rounded="pill"
             min-width="64"
             class="buttonImage"
@@ -36,9 +36,6 @@
           </v-img>
         </v-btn>
       </v-col>
-      <!-- <v-col cols="12">
-        <v-img height="300" src="@/assets/BLCbg.png" />
-      </v-col> -->
       <v-col v-show="chestStore.chestCount">
         3rd Drop:
         <DropDisplay :drop-element="chestStore.leftDrops.lastRandom" />

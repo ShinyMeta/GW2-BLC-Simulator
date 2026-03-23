@@ -10,7 +10,7 @@
           <v-btn value="chest" class="item-select-btn">
             <div class="item-select-content">
               <ItemImage
-                :item="{ name: 'Black Lion Chest', icon: blcChestItemImg }"
+                :item="{ name: 'Black Lion Chest', icon: blcChestImg }"
                 :size="52"
                 :tooltip="false"
                 :text-overlay="false"
@@ -66,7 +66,7 @@
 <script setup>
 import { computed, onBeforeUnmount, ref } from "vue";
 import { storeToRefs } from "pinia";
-import blcChestItemImg from "@/assets/BLChestItem.png";
+import blcChestImg from "@/assets/item/BLChest.png";
 import blcKeyImg from "@/assets/item/BLCKey.png";
 import goldenBlcKeyImg from "@/assets/item/goldenBLCKey.png";
 import unknownItem from "@/assets/item/unknown.png";
