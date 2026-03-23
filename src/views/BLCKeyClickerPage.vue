@@ -7,7 +7,7 @@
       location="left"
       :width="320"
     >
-      <div class="pa-3">
+      <div class="pa-4">
         <ChestPreviewCard />
       </div>
     </v-navigation-drawer>

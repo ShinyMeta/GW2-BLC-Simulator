@@ -1,5 +1,5 @@
 <template>
-  <v-card class="chest-preview-card" variant="outlined">
+  <v-card class="chest-preview-card" color="surface-lighten-1" variant="elevated">
     <div class="chest-preview-card__header">
       <div class="chest-preview-card__title text-subtitle-2">
         {{ currentChestConfig?.name || "Black Lion Chest" }}
@@ -26,7 +26,7 @@
           v-for="item in exclusiveItems"
           :key="item.itemId"
           :item="item"
-          :size="40"
+          :size="50"
           rounded="lg"
           :text-overlay="false"
           :badge-text="item.badgeText"
@@ -41,7 +41,7 @@
           v-for="item in weaponPreviewItems"
           :key="item.key"
           :item="item"
-          :size="40"
+          :size="50"
           rounded="lg"
           :text-overlay="false"
           :avatar-props="{ class: 'chest-preview-card__icon' }"
@@ -122,7 +122,7 @@ const weaponPreviewItems = computed(() => {
 .chest-preview-card__content {
   display: flex;
   align-items: center;
-  padding: 10px 8px;
+  padding: 10px;
 }
 
 .chest-preview-card__group {
