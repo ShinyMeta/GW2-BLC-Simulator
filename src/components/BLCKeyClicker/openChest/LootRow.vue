@@ -70,8 +70,16 @@ import statuetteImg from "@/assets/item/statuette.png";
 import d6PlaceholderImg from "@/assets/BLCOpenUI/d6PlaceHolder.png";
 
 const BASE_SLOT_COUNT = 4;
+const FLY_DURATION_MS = 350;
 const LOOT_DISPLAY_MS = 2500;
 const FADE_DURATION_MS = 600;
+
+const SHINE_COLORS = {
+  uncommon: "#33CC11",
+  rare: "#FFDD22",
+  exclusive: "#FFAA00",
+  superRare: "#9933FF",
+};
 
 const props = defineProps({
   variant: {
@@ -175,13 +183,16 @@ async function displayLoot(items = []) {
   const thisDisplayId = ++currentDisplayId;
 
   if (isActive.value) {
-    await preloadImages(items);
+    // Overlap the 550ms animation hold with image preloading so the
+    // total wait is max(preload, 550) instead of preload + 550.
+    await Promise.all([
+      preloadImages(items),
+      new Promise((r) => setTimeout(r, FLY_DURATION_MS)),
+    ]);
     if (thisDisplayId !== currentDisplayId) return;
 
     lootItems.value = [...items];
 
-    // Double-rAF: the browser paints one frame without the `revealed` class,
-    // guaranteeing that re-adding it restarts every fly-out animation.
     await new Promise((r) =>
       requestAnimationFrame(() => requestAnimationFrame(r)),
     );
@@ -190,17 +201,18 @@ async function displayLoot(items = []) {
     showLoot.value = true;
 
     for (let i = BASE_SLOT_COUNT; i < items.length; i++) {
-      const settleMs = computeFlyDelay(i, items.length) + 550;
+      const shineMs = computeFlyDelay(i, items.length);
+      const color = SHINE_COLORS[items[i]?.category] ?? "white";
       const id = window.setTimeout(() => {
         if (thisDisplayId !== currentDisplayId) return;
-        lootImageRefs[i]?.shine?.();
-      }, settleMs);
+        lootImageRefs[i]?.shine?.(color);
+      }, shineMs);
       shineTimeoutIds.push(id);
     }
 
     const lastDelay =
       items.length > 0 ? computeFlyDelay(items.length - 1, items.length) : 0;
-    const totalFlyInMs = lastDelay + 550;
+    const totalFlyInMs = lastDelay;
 
     fadeTimeoutId = window.setTimeout(() => {
       fadeTimeoutId = null;
@@ -266,11 +278,11 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transform: translateY(-120px) scale(0);
+  transform: translateY(-100px) scale(0.3);
 }
 
 .loot-overlay.revealed {
-  animation: fly-out 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: fly-out 0.35s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
   animation-delay: var(--fly-delay);
 }
 
@@ -297,17 +309,11 @@ onBeforeUnmount(() => {
 @keyframes fly-out {
   0% {
     opacity: 0;
-    transform: translateY(-120px) scale(0);
+    transform: translateY(-100px) scale(0.3);
   }
-  35% {
+  60% {
     opacity: 1;
-    transform: translateY(-15px) scale(1.12);
-  }
-  65% {
-    transform: translateY(6px) scale(0.96);
-  }
-  85% {
-    transform: translateY(-2px) scale(1.02);
+    transform: translateY(2px) scale(1.02);
   }
   100% {
     opacity: 1;
