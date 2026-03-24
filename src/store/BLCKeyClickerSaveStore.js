@@ -11,7 +11,7 @@ export const useBLCKeyClickerSaveStore = defineStore(
     const mapCompCompletionEvents = ref([]);
     const inventory = ref({
       blcKeys: 0,
-      goldenKeys: 0,
+      goldenKeys: 999,
       statuettes: 0,
       // gold: 0,
       // gems: 0, not sure about these
