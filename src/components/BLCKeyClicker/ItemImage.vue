@@ -10,14 +10,15 @@
         :class="rootClasses"
         :style="rootStyles"
       >
-        <div v-show="shineActive" class="item-image__shine">
+        <div
+          class="item-image__shine"
+          :class="shineClasses"
+        >
           <div
-            ref="shineBigRef"
             class="item-image__shine-layer item-image__shine-layer--big"
             :style="shineBigStyles"
           />
           <div
-            ref="shineSmallRef"
             class="item-image__shine-layer item-image__shine-layer--small"
             :style="shineSmallStyles"
           />
@@ -472,11 +473,18 @@ function handleImageError() {
   }
 }
 
-const shineActive = ref(false);
-const shineBigRef = ref(null);
-const shineSmallRef = ref(null);
+const shineVisible = ref(false);
+const shineSpinning = ref(false);
 const shineColor = ref("white");
-let shineAnimations = [];
+let shineTimeouts = [];
+
+const SHINE_ENTER_MS = 150;
+const SHINE_EXIT_MS = 700;
+
+const shineClasses = computed(() => ({
+  "item-image__shine--visible": shineVisible.value,
+  "item-image__shine--spinning": shineSpinning.value,
+}));
 
 const shineBigStyles = computed(() => ({
   maskImage: `url(${shineBigSrc})`,
@@ -490,60 +498,36 @@ const shineSmallStyles = computed(() => ({
   backgroundColor: shineColor.value,
 }));
 
-function shine(color = "white", duration = 1000) {
-  shineAnimations.forEach((a) => a.cancel());
-  shineAnimations = [];
+function clearShineTimeouts() {
+  shineTimeouts.forEach((id) => clearTimeout(id));
+  shineTimeouts = [];
+}
+
+async function shine(color = "white", duration = 2000) {
+  clearShineTimeouts();
   shineColor.value = color;
-  shineActive.value = true;
+  shineVisible.value = false;
+  shineSpinning.value = false;
 
-  nextTick(() => {
-    const bigEl = shineBigRef.value;
-    const smallEl = shineSmallRef.value;
-    if (!bigEl || !smallEl) return;
+  await nextTick();
+  shineVisible.value = true;
+  shineSpinning.value = true;
 
-    const enterMs = 150;
-    const exitMs = 200;
-    const totalMs = enterMs + duration + exitMs;
-    const enterFrac = enterMs / totalMs;
-    const exitFrac = 1 - exitMs / totalMs;
-    const midFrac1 = enterFrac + (exitFrac - enterFrac) * 0.4;
-    const midFrac2 = enterFrac + (exitFrac - enterFrac) * 0.75;
+  shineTimeouts.push(
+    setTimeout(() => {
+      shineVisible.value = false;
+    }, SHINE_ENTER_MS + duration),
+  );
 
-    const bigAnim = bigEl.animate(
-      [
-        { transform: "scale(0) rotate(0deg)", opacity: 0 },
-        { transform: "scale(1.3) rotate(50deg)", opacity: 0.85, offset: enterFrac },
-        { transform: "scale(1.15) rotate(140deg)", opacity: 0.7, offset: midFrac1 },
-        { transform: "scale(1.3) rotate(250deg)", opacity: 0.9, offset: midFrac2 },
-        { transform: "scale(1.2) rotate(310deg)", opacity: 0.85, offset: exitFrac },
-        { transform: "scale(0) rotate(360deg)", opacity: 0 },
-      ],
-      { duration: totalMs, easing: "ease-out", fill: "forwards" },
-    );
-
-    const smallAnim = smallEl.animate(
-      [
-        { transform: "scale(0) rotate(0deg)", opacity: 0 },
-        { transform: "scale(1.1) rotate(-40deg)", opacity: 1, offset: enterFrac },
-        { transform: "scale(1.0) rotate(-170deg)", opacity: 0.8, offset: midFrac1 },
-        { transform: "scale(1.15) rotate(-250deg)", opacity: 1, offset: midFrac2 },
-        { transform: "scale(1.0) rotate(-320deg)", opacity: 0.9, offset: exitFrac },
-        { transform: "scale(0) rotate(-360deg)", opacity: 0 },
-      ],
-      { duration: totalMs, easing: "ease-out", fill: "forwards" },
-    );
-
-    shineAnimations = [bigAnim, smallAnim];
-    bigAnim.finished
-      .then(() => {
-        shineActive.value = false;
-      })
-      .catch(() => {});
-  });
+  shineTimeouts.push(
+    setTimeout(() => {
+      shineSpinning.value = false;
+    }, SHINE_ENTER_MS + duration + SHINE_EXIT_MS),
+  );
 }
 
 onBeforeUnmount(() => {
-  shineAnimations.forEach((a) => a.cancel());
+  clearShineTimeouts();
 });
 
 defineExpose({ shine });
@@ -722,14 +706,21 @@ defineExpose({ shine });
   justify-content: center;
   pointer-events: none;
   overflow: visible;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 700ms ease-out, opacity 700ms ease-out;
+}
+
+.item-image__shine--visible {
+  transform: scale(1);
+  opacity: 1;
+  transition-duration: 150ms;
 }
 
 .item-image__shine-layer {
   position: absolute;
   width: 200%;
   height: 200%;
-  opacity: 0;
-  transform: scale(0);
   will-change: transform, opacity;
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -737,5 +728,27 @@ defineExpose({ shine });
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
+}
+
+.item-image__shine--spinning .item-image__shine-layer--big {
+  animation: shine-spin-big 1.5s linear infinite;
+}
+
+.item-image__shine--spinning .item-image__shine-layer--small {
+  animation: shine-spin-small 1.5s linear infinite;
+}
+
+@keyframes shine-spin-big {
+  0%   { transform: rotate(0deg)   scale(1.15); opacity: 0.85; }
+  33%  { transform: rotate(120deg) scale(1.35);  opacity: 0.7; }
+  66%  { transform: rotate(240deg) scale(1.0);  opacity: 0.9; }
+  100% { transform: rotate(360deg) scale(1.15); opacity: 0.85; }
+}
+
+@keyframes shine-spin-small {
+  0%   { transform: rotate(0deg)    scale(1.5);  opacity: 1.0; }
+  33%  { transform: rotate(-120deg) scale(1.65); opacity: 0.8; }
+  66%  { transform: rotate(-240deg) scale(1.4); opacity: 1.0; }
+  100% { transform: rotate(-360deg) scale(1.5);  opacity: 1.0; }
 }
 </style>
