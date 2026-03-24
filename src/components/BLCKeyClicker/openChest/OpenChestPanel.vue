@@ -73,8 +73,8 @@ import unknownItem from "@/assets/item/unknown.png";
 import ItemImage from "@/components/BLCKeyClicker/ItemImage.vue";
 import OpenChestButton from "@/components/BLCKeyClicker/openChest/OpenChestButton.vue";
 import LootRow from "@/components/BLCKeyClicker/openChest/LootRow.vue";
-import { useBLCKeyClickerSaveStore } from "@/store/BLCKeyClickerSaveStore";
-import { useLootStore } from "@/store/loot/lootStore";
+import { useBLCKeyClickerController } from "@/store/BLCKeyClickerController";
+import { useInventoryStore } from "@/store/inventoryStore";
 import { fetchItemLikeMetadata } from "@/utils/gw2api";
 
 const props = defineProps({
@@ -84,16 +84,16 @@ const props = defineProps({
   },
 });
 
-const saveStore = useBLCKeyClickerSaveStore();
-const lootStore = useLootStore();
-const { inventory } = storeToRefs(saveStore);
+const controller = useBLCKeyClickerController();
+const inventoryStore = useInventoryStore();
+const { inventory } = storeToRefs(inventoryStore);
 const chestButton = ref(null);
 const lootRow = ref(null);
 const keyTypes = [
-  { value: "blcKeys", name: "Black Lion Chest Key", icon: blcKeyImg },
-  { value: "goldenKeys", name: "Golden Black Lion Chest Key", icon: goldenBlcKeyImg },
+  { value: "blcKey", name: "Black Lion Chest Key", icon: blcKeyImg },
+  { value: "goldenKey", name: "Golden Black Lion Chest Key", icon: goldenBlcKeyImg },
 ];
-const selectedKeyType = ref("blcKeys");
+const selectedKeyType = ref("blcKey");
 const selectedKeyCount = computed(
   () => inventory.value[selectedKeyType.value] ?? 0
 );
@@ -117,9 +117,10 @@ function handleChestClick() {
   clearTimers();
   lootRow.value?.reset();
 
-  inventory.value[selectedKeyType.value] -= 1;
-
-  const drops = lootStore.open(selectedKeyType.value);
+  const drops = controller.openChest(selectedKeyType.value);
+  if (!drops) {
+    return;
+  }
   const displayLootPromise = resolveDisplayLoot(drops);
   const thisSequence = ++openSequenceId;
 

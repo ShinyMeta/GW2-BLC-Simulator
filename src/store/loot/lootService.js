@@ -161,10 +161,10 @@ function weightedRandom(items) {
  *  `{ itemId, label, quantity, category }`
  *
  * @param {object} lootTable - resolved table from buildLootTable()
- * @param {string} [keyType="blcKeys"] - "blcKeys" for normal odds, "goldenKeys" for a guaranteed 5th drop
+ * @param {string} [keyType="blcKey"] - "blcKey" for normal odds, "goldenKey" for a guaranteed 5th drop
  * @returns {Array<{ itemId: number, label: string, quantity: number, category: string }>}
  */
-export function openChest(lootTable, keyType = "blcKeys") {
+export function openChest(lootTable, keyType = "blcKey") {
   const drops = [];
 
   function pluck(item) {
@@ -184,7 +184,7 @@ export function openChest(lootTable, keyType = "blcKeys") {
   drops.push(pluck(weightedRandom(lootTable.commonLeft)));
   drops.push(pluck(weightedRandom(lootTable.commonRight)));
 
-  if (keyType === "goldenKeys" || Math.random() < lootTable.fifthDropChance) {
+  if (keyType === "goldenKey" || Math.random() < lootTable.fifthDropChance) {
     drops.push(pluck(weightedRandom(lootTable.fifthDrop)));
   }
 

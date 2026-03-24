@@ -14,7 +14,7 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount, useTemplateRef } from "vue";
 import { storeToRefs } from "pinia";
-import { useBLCKeyClickerSaveStore } from "@/store/BLCKeyClickerSaveStore";
+import { useMapCompStore } from "@/store/mapCompStore";
 
 import HeartImg from "@/assets/MapComp/Heart.png";
 import HeroPointImg from "@/assets/MapComp/HeroPoint.png";
@@ -34,8 +34,8 @@ particleImages.forEach((src) => {
   _particleImageAnchors.push(img);
 });
 
-const saveStore = useBLCKeyClickerSaveStore();
-const { mapCompProgress } = storeToRefs(saveStore);
+const mapCompStore = useMapCompStore();
+const { mapCompProgress } = storeToRefs(mapCompStore);
 
 const layerEl = useTemplateRef("layerEl");
 const particles = ref([]);

@@ -29,23 +29,25 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeUnmount, watch} from "vue";
+import { ref, computed, onBeforeUnmount, watch } from "vue";
 import { storeToRefs } from "pinia";
 import BLCKeyImg from "@/assets/item/BLCKey.png";
 import TransmutationChargeImg from "@/assets/item/TransmutationCharge.png";
 import MapCompBackgroundLayer from "@/components/BLCKeyClicker/mapComp/MapCompBackgroundLayer.vue";
 import MapCompButton from "@/components/BLCKeyClicker/mapComp/MapCompButton.vue";
-import { useBLCKeyClickerSaveStore } from "@/store/BLCKeyClickerSaveStore";
+import { useBLCKeyClickerController } from "@/store/BLCKeyClickerController";
+import { useMapCompStore } from "@/store/mapCompStore";
 
 const MAX_REWARD_FLYOUTS = 10;
 
 const emit = defineEmits(["click", "mapComplete"]);
-const saveStore = useBLCKeyClickerSaveStore();
+const controller = useBLCKeyClickerController();
+const mapCompStore = useMapCompStore();
 const {
   mapCompClicksToComp,
   mapCompProgress,
   mapCompCompletionEvents,
-} = storeToRefs(saveStore);
+} = storeToRefs(mapCompStore);
 const rewardFlyouts = ref([]);
 const lastProcessedMapCompCompletionEventId = ref(
   mapCompCompletionEvents.value.length
@@ -172,7 +174,7 @@ watch(
 
 function handleClick() {
   emit("click");
-  saveStore.advanceMapCompletion("mapCompButton");
+  controller.advanceMapCompletion("mapCompButton");
 }
 
 // defineExpose({ ringDisplayValue, showRewardFlyout });

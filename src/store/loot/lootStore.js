@@ -3,7 +3,7 @@ import { shallowRef, ref, computed } from "vue";
 import { mergeTemplateWithConfig, buildLootTable, openChest } from "@/store/loot/lootService";
 import { generateChestConfig } from "@/store/loot/generateChestConfig";
 import { LootHandler } from "@/store/loot/lootHandler";
-import { useBLCKeyClickerSaveStore } from "@/store/BLCKeyClickerSaveStore";
+import { useInventoryStore } from "@/store/inventoryStore";
 import template from "@/store/loot/config/template.json";
 
 const ITEM_ID = {
@@ -32,7 +32,7 @@ export const useLootStore = defineStore("loot", () => {
     };
   });
 
-  const saveStore = useBLCKeyClickerSaveStore();
+  const inventoryStore = useInventoryStore();
   const lootHandler = new LootHandler();
 
   const currentHistoryEntry = computed(() =>
@@ -42,11 +42,20 @@ export const useLootStore = defineStore("loot", () => {
   );
 
   lootHandler
-    .onItemId(ITEM_ID.STATUETTE, (drop) => saveStore.addToInventory("statuettes", drop.quantity))
-    .onItemId(ITEM_ID.TRANSMUTATION_CHARGE, (drop) => saveStore.addToInventory("transmutationCharges", drop.quantity))
-    .onItemId(ITEM_ID.GOLDEN_KEY, (drop) => saveStore.addToInventory("goldenKeys", drop.quantity))
-    .onItemId(ITEM_ID.WEAPON_TICKET, (drop) => saveStore.addToInventory("blackLionWeaponTickets", drop.quantity))
-    .onItemId(ITEM_ID.TICKET_SCRAP, () => saveStore.addToInventory("blackLionWeaponTickets", 0.1))
+    .onItemId(ITEM_ID.STATUETTE, (drop) => inventoryStore.adjustInventory("statuette", drop.quantity))
+    .onItemId(
+      ITEM_ID.TRANSMUTATION_CHARGE,
+      (drop) => inventoryStore.adjustInventory("transmutationCharge", drop.quantity)
+    )
+    .onItemId(ITEM_ID.GOLDEN_KEY, (drop) => inventoryStore.adjustInventory("goldenKey", drop.quantity))
+    .onItemId(
+      ITEM_ID.WEAPON_TICKET,
+      (drop) => inventoryStore.adjustInventory("blackLionWeaponTicket", drop.quantity)
+    )
+    .onItemId(
+      ITEM_ID.TICKET_SCRAP,
+      () => inventoryStore.adjustInventory("blackLionWeaponTicket", 0.1)
+    )
     .onCategory("exclusive", (drop) => {
       lootHandler.markExclusiveDropped(drop.itemId);
       exclusiveLookup.value = new Map(lootHandler.exclusiveLookup);
@@ -98,10 +107,10 @@ export const useLootStore = defineStore("loot", () => {
    * Each drop is run through the loot handler (updating inventory, etc.)
    * and appended to the current history entry.
    *
-   * @param {string} [keyType="blcKeys"] - "blcKeys" for normal odds, "goldenKeys" for a guaranteed 5th drop
+   * @param {string} [keyType="blcKey"] - "blcKey" for normal odds, "goldenKey" for a guaranteed 5th drop
    * @returns {Array<{ itemId: number, skinId?: number, label: string, quantity: number, category: string }>}
    */
-  function open(keyType = "blcKeys") {
+  function open(keyType = "blcKey") {
     if (!lootTable.value) {
       throw new Error("No chest loaded — call loadChest() first");
     }
