@@ -24,6 +24,7 @@
       <OpenChestButton
         ref="chestButton"
         :disabled="selectedKeyCount === 0"
+        :appearance-type="chestAppearanceType"
         @click="handleChestClick"
       />
 
@@ -86,7 +87,11 @@ const props = defineProps({
 
 const controller = useBLCKeyClickerController();
 const inventoryStore = useInventoryStore();
+const lootStore = controller.lootStore;
 const { inventory } = storeToRefs(inventoryStore);
+const chestAppearanceType = computed(
+  () => lootStore.currentChestConfig?.appearanceType ?? 0
+);
 const chestButton = ref(null);
 const lootRow = ref(null);
 const keyTypes = [
@@ -176,11 +181,18 @@ onBeforeUnmount(() => {
 }
 
 .chest-controls {
+  --chest-render-size: 200px;
+  --seam-from-bottom: calc(var(--chest-render-size) * 98 / 256);
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+  align-items: end;
   gap: 16px;
   width: 100%;
+}
+
+.chest-controls__side {
+  margin-bottom: var(--seam-from-bottom);
+  transform: translateY(50%);
 }
 
 .chest-controls__side--left {

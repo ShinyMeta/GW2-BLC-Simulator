@@ -39,9 +39,8 @@
 </template>
 
 <script setup>
-import { nextTick, onBeforeUnmount, ref } from "vue";
-import chestBottomSrc from "@/assets/BLCOpenUI/chestHalf/2-bottom.png";
-import chestTopSrc from "@/assets/BLCOpenUI/chestHalf/2-top.png";
+import { computed, nextTick, onBeforeUnmount, ref } from "vue";
+import chestAppearances from "@/assets/BLCOpenUI/chestHalf";
 import chestInsideGlowSrc from "@/assets/BLCOpenUI/chestInsideGlow.png";
 import chestInsideFlashSrc from "@/assets/BLCOpenUI/chestInsideFlash.png";
 
@@ -51,7 +50,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  appearanceType: {
+    type: Number,
+    default: 0,
+  },
 });
+
+const chestTopSrc = computed(() => chestAppearances[props.appearanceType]?.top ?? chestAppearances[0].top);
+const chestBottomSrc = computed(() => chestAppearances[props.appearanceType]?.bottom ?? chestAppearances[0].bottom);
 
 const isPressed = ref(false);
 const isShaking = ref(false);
@@ -189,10 +195,27 @@ onBeforeUnmount(() => {
 
 .chest-image-wrap {
   position: relative;
-  display: inline-block;
+  display: block;
   width: 200px;
   transition: transform 0.16s ease-out;
   will-change: transform;
+}
+
+.chest-image-wrap::before {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(var(--v-theme-on-background), 0.45) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
 }
 
 .chest-btn:not(.disabled):hover .chest-image-wrap {

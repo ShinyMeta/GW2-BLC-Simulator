@@ -84,6 +84,7 @@ export function generateChestConfigFromCatalogs({
 
   return {
     name: name ?? pickRandomChestName(),
+    appearanceType: Math.floor(Math.random() * 4),
     sets: {
       guaranteedItem: pickRandom(
         guaranteedItemCatalog,
