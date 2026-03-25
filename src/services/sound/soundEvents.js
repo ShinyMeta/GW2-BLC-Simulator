@@ -1,5 +1,6 @@
 import { getRandomSound } from "./soundLibrary";
 import { useSoundSettingsStore } from "./soundSettingsStore";
+import { play } from "./audioEngine";
 
 const DEFAULT_THROTTLE_MS = 100;
 
@@ -35,7 +36,5 @@ export function emitSoundEvent(eventName, overrides = {}) {
   const vol = settings.effectiveVolume(channel);
   if (vol <= 0) return;
 
-  const audio = new Audio(url);
-  audio.volume = vol;
-  audio.play().catch(() => {});
+  play(url, vol);
 }

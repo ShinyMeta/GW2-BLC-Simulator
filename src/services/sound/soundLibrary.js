@@ -23,3 +23,7 @@ export function getRandomSound(key) {
 export function getSoundKeys() {
   return [...soundLibrary.keys()];
 }
+
+export function getAllUrls() {
+  return [...soundLibrary.values()].flat();
+}
