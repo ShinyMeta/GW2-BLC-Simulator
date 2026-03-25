@@ -217,6 +217,7 @@ import { storeToRefs } from "pinia";
 import blcKeyIcon from "@/assets/item/BLCKey.png";
 import goldenBlcKeyIcon from "@/assets/item/goldenBLCKey.png";
 import ItemImage from "@/components/BLCKeyClicker/ItemImage.vue";
+import { emitSoundEvent } from "@/services/sound";
 import { fetchItemLikeMetadata } from "@/utils/gw2api";
 import template from "@/store/loot/config/template.json";
 import { mergeTemplateWithConfig } from "@/store/loot/lootService";
@@ -428,8 +429,15 @@ const previewPanels = computed(() =>
 
 watch(
   dialogOpen,
-  async (isOpen) => {
-    if (!isOpen || !props.chestConfig) return;
+  async (isOpen, wasOpen) => {
+    if (!isOpen) {
+      if (wasOpen) {
+        emitSoundEvent("chestPreviewClosed");
+      }
+      return;
+    }
+
+    if (!props.chestConfig) return;
     isLoadingMetadata.value = true;
     try {
       await fetchItemLikeMetadata(rawPanels.value.flatMap(collectAllEntries));

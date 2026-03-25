@@ -6,6 +6,9 @@ const DEFAULT_THROTTLE_MS = 100;
 const EVENT_REGISTRY = {
   chestOpen:     { soundKey: "ChestOpen",     channel: "chest",   throttleMs: 500 },
   chestDisabled: { soundKey: "SwishLoud",     channel: "chest",   throttleMs: 250 },
+  chestLootFall: { soundKey: "ChestLootFall", channel: "chest",   throttleMs: 50 },
+  chestPreviewOpened: { soundKey: "GizmoRatchet", channel: "chest", throttleMs: 100 },
+  chestPreviewClosed: { soundKey: "SwishSoft", channel: "chest", throttleMs: 100 },
   mapClick:      { soundKey: "FootFall",      channel: "mapComp", throttleMs: DEFAULT_THROTTLE_MS },
   mapComplete:   { soundKey: "Exp",           channel: "mapComp", throttleMs: DEFAULT_THROTTLE_MS },
 };

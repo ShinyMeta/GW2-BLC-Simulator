@@ -13,6 +13,7 @@
             color="primary"
             size="small"
             :disabled="!currentChestConfig"
+            @click="handlePreviewClick"
           />
         </template>
       </ChestPreviewDialog>
@@ -55,11 +56,16 @@
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import ItemImage from "@/components/BLCKeyClicker/ItemImage.vue";
+import { emitSoundEvent } from "@/services/sound";
 import ChestPreviewDialog from "./ChestPreviewDialog.vue";
 import { useLootStore } from "@/store/loot/lootStore";
 
 const lootStore = useLootStore();
 const { currentChestConfig } = storeToRefs(lootStore);
+
+function handlePreviewClick() {
+  emitSoundEvent("chestPreviewOpened");
+}
 
 function pickRandom(array) {
   return array[Math.floor(Math.random() * array.length)];

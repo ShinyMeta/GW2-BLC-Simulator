@@ -63,6 +63,7 @@
 
 <script setup>
 import ItemImage from "@/components/BLCKeyClicker/ItemImage.vue";
+import { emitSoundEvent } from "@/services/sound";
 import { computed, onBeforeUnmount, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useLootStore } from "@/store/loot/lootStore";
@@ -70,9 +71,10 @@ import statuetteImg from "@/assets/item/statuette.png";
 import d6PlaceholderImg from "@/assets/BLCOpenUI/d6PlaceHolder.png";
 
 const BASE_SLOT_COUNT = 4;
-const FLY_DURATION_MS = 350;
-const LOOT_DISPLAY_MS = 2500;
+const LOOT_BASE_DELAY_MS = 350;
+const LOOT_FADE_DELAY_MS = 2500;
 const FADE_DURATION_MS = 600;
+const LOOT_SOUND_DELAY_MS = 50;
 
 const SHINE_COLORS = {
   uncommon: "#33CC11",
@@ -142,6 +144,7 @@ function computeFlyDelay(index, totalItems) {
 let fadeTimeoutId = null;
 let clearTimeoutId = null;
 let shineTimeoutIds = [];
+let lootFallTimeoutIds = [];
 let currentDisplayId = 0;
 
 function clearTimers() {
@@ -155,6 +158,8 @@ function clearTimers() {
   }
   shineTimeoutIds.forEach((id) => window.clearTimeout(id));
   shineTimeoutIds = [];
+  lootFallTimeoutIds.forEach((id) => window.clearTimeout(id));
+  lootFallTimeoutIds = [];
 }
 
 function reset() {
@@ -183,11 +188,11 @@ async function displayLoot(items = [], { onFadeStart } = {}) {
   const thisDisplayId = ++currentDisplayId;
 
   if (isActive.value) {
-    // Overlap the 550ms animation hold with image preloading so the
-    // total wait is max(preload, 550) instead of preload + 550.
+    // Overlap the LOOT_BASE_DELAY_MS animation hold with image preloading so the
+    // total wait is max(preload, LOOT_BASE_DELAY_MS) 
     await Promise.all([
       preloadImages(items),
-      new Promise((r) => setTimeout(r, FLY_DURATION_MS)),
+      new Promise((r) => setTimeout(r, LOOT_BASE_DELAY_MS)),
     ]);
     if (thisDisplayId !== currentDisplayId) return;
 
@@ -199,6 +204,15 @@ async function displayLoot(items = [], { onFadeStart } = {}) {
     if (thisDisplayId !== currentDisplayId) return;
 
     showLoot.value = true;
+
+    items.forEach((_, index) => {
+      const settleMs = computeFlyDelay(index, items.length) + LOOT_SOUND_DELAY_MS;
+      const id = window.setTimeout(() => {
+        if (thisDisplayId !== currentDisplayId) return;
+        emitSoundEvent("chestLootFall");
+      }, settleMs);
+      lootFallTimeoutIds.push(id);
+    });
 
     for (let i = BASE_SLOT_COUNT; i < items.length; i++) {
       const shineMs = computeFlyDelay(i, items.length);
@@ -225,7 +239,7 @@ async function displayLoot(items = [], { onFadeStart } = {}) {
         isFading.value = false;
         lootItems.value = [];
       }, FADE_DURATION_MS);
-    }, totalFlyInMs + LOOT_DISPLAY_MS);
+    }, totalFlyInMs + LOOT_FADE_DELAY_MS);
   } else {
     lootItems.value = [...items];
     showLoot.value = true;
@@ -245,6 +259,7 @@ onBeforeUnmount(() => {
   justify-content: center;
   gap: 8px;
   min-height: 68px;
+  user-select: none;
 }
 
 /* --- Active variant: slot containers with placeholder + overlay --- */
