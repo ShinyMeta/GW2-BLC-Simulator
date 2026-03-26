@@ -4,10 +4,14 @@
     <template v-if="isActive">
       <div
         v-for="index in slotIndices"
-        v-show="index < BASE_SLOT_COUNT || index < lootItems.length"
         :key="index"
         class="loot-slot-container"
-        :class="{ 'loot-slot-container--extra': index >= BASE_SLOT_COUNT }"
+        :class="{
+          'loot-slot-container--extra': index >= BASE_SLOT_COUNT,
+          'loot-slot-container--show':
+            index >= BASE_SLOT_COUNT &&
+            index < lootItems.length,
+        }"
       >
         <div class="loot-placeholder">
           <ItemImage
@@ -274,7 +278,23 @@ onBeforeUnmount(() => {
 }
 
 .loot-slot-container--extra {
+  width: 0;
+  border-width: 0;
   border-color: rgba(var(--v-theme-on-surface), 0.5);
+  margin-left: -8px;
+  opacity: 0;
+  transition:
+    width 0.35s cubic-bezier(.08,.71,.36,1),
+    border-width 0.35s cubic-bezier(.08,.71,.36,1),
+    margin-left 0.35s cubic-bezier(.08,.71,.36,1),
+    opacity 0.35s ease-out;
+}
+
+.loot-slot-container--extra.loot-slot-container--show {
+  width: 64px;
+  border-width: 2px;
+  margin-left: 0;
+  opacity: 1;
 }
 
 .loot-placeholder {
