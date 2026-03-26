@@ -51,6 +51,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  locked: {
+    type: Boolean,
+    default: false,
+  },
   appearanceType: {
     type: Number,
     default: 0,
@@ -166,6 +170,8 @@ async function playDisabledShake() {
 }
 
 function handleClick() {
+  if (props.locked) return;
+
   if (props.disabled) {
     emitSoundEvent("chestDisabled");
     playDisabledShake();

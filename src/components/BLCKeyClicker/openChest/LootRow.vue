@@ -79,6 +79,7 @@ const LOOT_BASE_DELAY_MS = 350;
 const LOOT_FADE_DELAY_MS = 2500;
 const FADE_DURATION_MS = 600;
 const LOOT_SOUND_DELAY_MS = 50;
+const FLY_OUT_ANIM_MS = 350;
 
 const SHINE_COLORS = {
   uncommon: "#33CC11",
@@ -88,6 +89,8 @@ const SHINE_COLORS = {
 };
 
 const props = defineProps({
+  // active: The main row below the chest button
+  // passive: primarily used to display loot history in side panel
   variant: {
     type: String,
     default: "active",
@@ -147,6 +150,7 @@ function computeFlyDelay(index, totalItems) {
 
 let fadeTimeoutId = null;
 let clearTimeoutId = null;
+let flyoutCompleteTimeoutId = null;
 let shineTimeoutIds = [];
 let lootFallTimeoutIds = [];
 let currentDisplayId = 0;
@@ -159,6 +163,10 @@ function clearTimers() {
   if (clearTimeoutId !== null) {
     window.clearTimeout(clearTimeoutId);
     clearTimeoutId = null;
+  }
+  if (flyoutCompleteTimeoutId !== null) {
+    window.clearTimeout(flyoutCompleteTimeoutId);
+    flyoutCompleteTimeoutId = null;
   }
   shineTimeoutIds.forEach((id) => window.clearTimeout(id));
   shineTimeoutIds = [];
@@ -185,7 +193,7 @@ async function preloadImages(items) {
   );
 }
 
-async function displayLoot(items = [], { onFadeStart } = {}) {
+async function displayLoot(items = [], { onFadeStart, onFlyoutComplete } = {}) {
   clearTimers();
   isFading.value = false;
   showLoot.value = false;
@@ -231,6 +239,14 @@ async function displayLoot(items = [], { onFadeStart } = {}) {
     const lastDelay =
       items.length > 0 ? computeFlyDelay(items.length - 1, items.length) : 0;
     const totalFlyInMs = lastDelay;
+
+    if (onFlyoutComplete) {
+      flyoutCompleteTimeoutId = window.setTimeout(() => {
+        flyoutCompleteTimeoutId = null;
+        if (thisDisplayId !== currentDisplayId) return;
+        onFlyoutComplete();
+      }, totalFlyInMs + FLY_OUT_ANIM_MS);
+    }
 
     fadeTimeoutId = window.setTimeout(() => {
       fadeTimeoutId = null;

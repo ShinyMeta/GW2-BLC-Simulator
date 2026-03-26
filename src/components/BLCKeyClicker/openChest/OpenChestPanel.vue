@@ -24,6 +24,7 @@
       <OpenChestButton
         ref="chestButton"
         :disabled="selectedKeyCount === 0"
+        :locked="isAnimationLocked"
         :appearance-type="chestAppearanceType"
         @click="handleChestClick"
       />
@@ -103,6 +104,7 @@ const selectedKeyType = ref("blcKey");
 const selectedKeyCount = computed(
   () => inventory.value[selectedKeyType.value] ?? 0
 );
+const isAnimationLocked = ref(false);
 let lootRevealTimeoutId = null;
 let openSequenceId = 0;
 
@@ -120,6 +122,8 @@ function clearTimers() {
 }
 
 function handleChestClick() {
+  if (isAnimationLocked.value) return;
+
   clearTimers();
   lootRow.value?.reset();
 
@@ -127,6 +131,8 @@ function handleChestClick() {
   if (!drops) {
     return;
   }
+
+  isAnimationLocked.value = true;
   emitSoundEvent("chestOpen");
   const displayLootPromise = resolveDisplayLoot(drops);
   const thisSequence = ++openSequenceId;
@@ -137,6 +143,9 @@ function handleChestClick() {
     if (thisSequence !== openSequenceId) return;
     lootRow.value?.displayLoot(displayLoot, {
       onFadeStart: () => chestButton.value?.close(),
+      onFlyoutComplete: () => {
+        isAnimationLocked.value = false;
+      },
     });
   }, props.lootRevealDelayMs);
 }
@@ -161,6 +170,7 @@ async function resolveDisplayLoot(drops) {
 
 function reset() {
   clearTimers();
+  isAnimationLocked.value = false;
   chestButton.value?.reset();
   lootRow.value?.reset();
 }
@@ -185,6 +195,8 @@ onBeforeUnmount(() => {
 .chest-controls {
   --chest-render-size: 200px;
   --seam-from-bottom: calc(var(--chest-render-size) * 98 / 256);
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: end;
