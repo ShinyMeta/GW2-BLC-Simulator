@@ -213,14 +213,13 @@
 
 <script setup>
 import { computed, ref, watch } from "vue";
-import { storeToRefs } from "pinia";
 import blcKeyIcon from "@/assets/item/BLCKey.png";
 import goldenBlcKeyIcon from "@/assets/item/goldenBLCKey.png";
 import ItemImage from "@/components/BLCKeyClicker/ItemImage.vue";
 import { emitSoundEvent } from "@/services/sound";
 import { fetchItemLikeMetadata } from "@/utils/gw2api";
 import template from "@/store/loot/config/template.json";
-import { mergeTemplateWithConfig } from "@/store/loot/lootService";
+import { mergeTemplateWithConfig, buildLootTable } from "@/store/loot/lootService";
 import { useLootStore } from "@/store/loot/lootStore";
 
 const CATEGORY_ORDER = [
@@ -263,7 +262,20 @@ const props = defineProps({
 });
 
 const lootStore = useLootStore();
-const { lootTable } = storeToRefs(lootStore);
+
+// Build a local lootTable from the merged config so this component
+// no longer depends on the store's lootTable. Exclusives are filtered
+// using the store's `hasExclusiveDropped` helper.
+const lootTable = computed(() => {
+  if (!mergedConfig.value) return null;
+  const base = buildLootTable(mergedConfig.value);
+  return {
+    ...base,
+    fifthDrop: base.fifthDrop.filter(
+      (item) => item.category !== "exclusive" || !lootStore.hasExclusiveDropped(item.itemId),
+    ),
+  };
+});
 
 const dialogOpen = ref(false);
 const percentMode = ref("perChest");

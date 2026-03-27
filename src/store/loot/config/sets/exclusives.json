@@ -1,6 +1,14 @@
 {
   "items": [
     {
+      "itemId": 107071,
+      "label": "Dance Platform Package"
+    },
+    {
+      "itemId": 106889,
+      "label": "Vermilion Staff Skin"
+    },
+    {
       "itemId": 106871,
       "label": "Steam-Powered Legwear Package"
     },
@@ -119,18 +127,6 @@
     {
       "itemId": 101419,
       "label": "Star Sentinel Outfit"
-    },
-    {
-      "itemId": 105365,
-      "label": "Box of Deathly Shoulder Skins"
-    },
-    {
-      "itemId": 105387,
-      "label": "Box of Deathly Avian Shoulder Skins"
-    },
-    {
-      "itemId": 105349,
-      "label": "Box of Deathly Bull's Shoulder Skins"
     },
     {
       "itemId": 101388,
@@ -521,12 +517,12 @@
       "label": "Grasping Phantom Glider"
     },
     {
-      "itemId": 108154,
-      "label": "Acclaimed Militia Leggings Skin"
+      "itemId": 108822,
+      "label": "Portable Portal Backpack Skin"
     },
     {
-      "itemId": 107071,
-      "label": "Dance Platform Package"
+      "itemId": 108154,
+      "label": "Acclaimed Militia Leggings Skin"
     }
   ]
 }
