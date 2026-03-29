@@ -76,6 +76,7 @@
           :size="50"
           rounded="lg"
           :text-overlay="false"
+          :tooltip="item.collection"
           :avatar-props="{ class: 'chest-preview-card__icon' }"
         />
       </div>
@@ -155,7 +156,7 @@ const weaponPreviewItems = computed(() => {
   for (const setKey of ["uncommonWeapons", "rareWeapons"]) {
     const weapons = config.sets[setKey]?.items;
     if (weapons?.length) {
-      items.push({ ...pickRandom(weapons), key: setKey });
+      items.push({ ...pickRandom(weapons), key: setKey, collection: config.sets[setKey].name });
     }
   }
   return items;

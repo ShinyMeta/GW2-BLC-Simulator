@@ -33,8 +33,4 @@ const reverseDrops = computed(() => {
 
 <style scoped>
 
-.history-detail {
-  overflow-y: auto;
-  max-height: calc(100dvh - 120px);
-}
 </style>

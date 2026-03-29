@@ -34,8 +34,5 @@ const reversedHistory = computed(() => [...chestHistory.value].reverse());
 </script>
 
 <style scoped>
-.history-display {
-  overflow-y: auto;
-  max-height: calc(100dvh - 120px);
-}
+
 </style>

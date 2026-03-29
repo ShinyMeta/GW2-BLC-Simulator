@@ -17,23 +17,25 @@
 
     <v-divider class="mb-1" />
 
-    <v-list v-if="currentMenu" density="compact" nav>
-      <v-list-item
-        v-for="entry in currentMenu"
-        :key="entry.title"
-        :prepend-icon="entry.icon"
-        :title="entry.title"
-        @click="rightPanelStore.navigateTo(entry.path)"
-      />
-    </v-list>
-
-    <template v-else>
-      <GraphicsSettings v-if="currentView === 'graphics'" />
-      <SoundSettings v-else-if="currentView === 'sound'" />
-      <HistoryDisplay v-else-if="currentView === 'history'" />
-      <HistoryDetail v-else-if="currentView === 'drops'" 
-        :chestHistoryEntry="pageMetaData.selectedHistoryEntry" />
-    </template>
+    <div class="right-panel__content">
+      <v-list v-if="currentMenu" density="compact" nav>
+        <v-list-item
+          v-for="entry in currentMenu"
+          :key="entry.title"
+          :prepend-icon="entry.icon"
+          :title="entry.title"
+          @click="rightPanelStore.navigateTo(entry.path)"
+        />
+      </v-list>
+  
+      <template v-else>
+        <GraphicsSettings v-if="currentView === 'graphics'" />
+        <SoundSettings v-else-if="currentView === 'sound'" />
+        <HistoryDisplay v-else-if="currentView === 'history'" />
+        <HistoryDetail v-else-if="currentView === 'drops'" 
+          :chestHistoryEntry="pageMetaData.selectedHistoryEntry" />
+      </template>
+    </div>
   </div>
 </template>
 
@@ -66,14 +68,6 @@ const LABELS = Object.fromEntries([
 const rightPanelStore = useRightPanelStore();
 const { path, currentView, pageMetaData } = storeToRefs(rightPanelStore);
 
-
-// const path = ref([]);
-// const selectedHistoryEntry = ref(null);
-
-// const currentView = computed(() =>
-//   path.value.length === 0 ? "root" : path.value[path.value.length - 1],
-// );
-
 const currentMenu = computed(() => MENUS[currentView.value] ?? null);
 
 const breadcrumbItems = computed(() => {
@@ -88,14 +82,6 @@ const breadcrumbItems = computed(() => {
   return items;
 });
 
-// function navigateTo(newPath) {
-//   path.value = [...newPath];
-// }
-
-// function handleOpenDrops(entry) {
-//   selectedHistoryEntry.value = entry;
-//   rightPanelStore.navigateTo(["history", "drops"]);
-// }
 </script>
 
 <style scoped>
@@ -107,5 +93,10 @@ const breadcrumbItems = computed(() => {
 .breadcrumb-link:hover {
   opacity: 1;
   text-decoration: underline;
+}
+
+.right-panel__content {
+  height: calc(100dvh - 110px);
+  overflow-y: scroll;
 }
 </style>
