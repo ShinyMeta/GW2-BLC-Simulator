@@ -272,13 +272,10 @@ const resolvedIdInfo = computed(() => {
   return null;
 });
 
-const metadataKey = computed(() =>
-  JSON.stringify({
-    skinId: sourceItem.value.skinId ?? null,
-    itemId: sourceItem.value.itemId ?? null,
-    id: sourceItem.value.id ?? null,
-  })
-);
+const metadataKey = computed(() => {
+  const info = resolvedIdInfo.value;
+  return info ? `${info.label}:${info.value}` : "";
+});
 
 watch(
   metadataKey,

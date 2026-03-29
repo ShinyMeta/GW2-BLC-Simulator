@@ -9,6 +9,8 @@
         No opens for this chest.
       </div>
       <div v-else>
+        <!-- <div v-for="(open, idx) in reverseDrops" :key="(idx+1)" class="mb-3">
+          <HistoryLootRow :items="open || []" size="40" :label="`#${(idx+1)}`" /> -->
         <div v-for="(open, idx) in reverseDrops" :key="reverseDrops.length - (idx)" class="mb-3">
           <HistoryLootRow :items="open || []" size="40" :label="`#${reverseDrops.length - (idx)}`" />
         </div>
@@ -20,13 +22,14 @@
 <script setup>
 import { computed } from "vue";
 import ChestPreviewCard from "@/components/BLCKeyClicker/openChest/ChestPreviewCard.vue";
-import HistoryLootRow from "@/components/BLCKeyClicker/rightPanel/HistoryLootRow.vue";
+import HistoryLootRow from "@/components/BLCKeyClicker/rightPanel/history/HistoryLootRow.vue";
 
 const props = defineProps({
   chestHistoryEntry: { type: Object, default: null },
 });
 
 const reverseDrops = computed(() => {
+  // return props.chestHistoryEntry.opens
   return props.chestHistoryEntry?.opens ? [...props.chestHistoryEntry.opens].reverse() : [];
 });
 </script>

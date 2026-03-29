@@ -17,5 +17,9 @@ export const useSoundSettingsStore = defineStore("soundSettings", () => {
     return masterVolume.value * chVol;
   }
 
-  return { muted, masterVolume, channelVolumes, effectiveVolume };
+  function toggleMute() {
+    muted.value = !muted.value;
+  }
+
+  return { muted, masterVolume, channelVolumes, effectiveVolume, toggleMute };
 });

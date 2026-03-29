@@ -42,10 +42,10 @@
 <script setup>
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
-import GraphicsSettings from "./GraphicsSettings.vue";
-import SoundSettings from "./SoundSettings.vue";
-import HistoryDisplay from "./HistoryDisplay.vue";
-import HistoryDetail from "./HistoryDetail.vue";
+import GraphicsSettings from "./settings/GraphicsSettings.vue";
+import SoundSettings from "./settings/SoundSettings.vue";
+import HistoryDisplay from "./history/HistoryDisplay.vue";
+import HistoryDetail from "./history/HistoryDetail.vue";
 
 import { useRightPanelStore } from "@/store/RightPanelStore";
 
@@ -55,8 +55,8 @@ const MENUS = {
     { icon: "mdi-history", title: "History", path: ["history"] },
   ],
   settings: [
-    { icon: "mdi-monitor", title: "Graphics", path: ["settings", "graphics"] },
     { icon: "mdi-volume-high", title: "Sound", path: ["settings", "sound"] },
+    { icon: "mdi-monitor", title: "Graphics", path: ["settings", "graphics"] },
   ],
 };
 
